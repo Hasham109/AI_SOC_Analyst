@@ -29,6 +29,29 @@ if not BACKEND_URL or not BACKEND_TOKEN:
 
 HEADERS = {"Authorization": f"Bearer {BACKEND_TOKEN}"}
 
+# ── Canonical Page Identifiers ────────────────────────────────────────────────
+PAGE_SOC_OVERVIEW = "SOC Overview"
+PAGE_ALERTS = "Alerts"
+PAGE_INCIDENTS = "Incidents"
+PAGE_INVESTIGATION = "Investigation"
+PAGE_AI_ANALYST = "AI Analyst"
+PAGE_RESPONSE_PLAN = "Response Plan"
+PAGE_REPORTS = "Reports"
+PAGE_THREAT_CONTEXT = "Threat Context"
+PAGE_SYSTEM_HEALTH = "System Health"
+
+NAV_PAGES = [
+    PAGE_SOC_OVERVIEW,
+    PAGE_ALERTS,
+    PAGE_INCIDENTS,
+    PAGE_INVESTIGATION,
+    PAGE_AI_ANALYST,
+    PAGE_RESPONSE_PLAN,
+    PAGE_REPORTS,
+    PAGE_THREAT_CONTEXT,
+    PAGE_SYSTEM_HEALTH,
+]
+
 
 # ── API Helpers ───────────────────────────────────────────────────────────────
 def api_get(path: str, params: Optional[Dict[str, Any]] = None, timeout: int = 15) -> Dict[str, Any]:
@@ -63,39 +86,67 @@ def inject_css() -> None:
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-        /* Hide Streamlit branding only */
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        .stDeployButton {display: none;}
-        div[data-testid="stDecoration"] {display: none;}
-        header[data-testid="stHeader"] {visibility: hidden; height: 0 !important; min-height: 0 !important; padding: 0 !important;}
-
-        /* ══ FORCE SIDEBAR ALWAYS OPEN — never allow CSS-collapse ══ */
-        section[data-testid="stSidebar"] {
-            display: flex !important;
-            min-width: 244px !important;
-            max-width: 288px !important;
-            transform: translateX(0px) !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-        section[data-testid="stSidebar"] > div {
-            display: flex !important;
-            opacity: 1 !important;
-        }
-
-        /* Style the sidebar collapse toggle button - make it very obvious */
-        [data-testid="stSidebarCollapsedControl"] {
-            display: flex !important;
-            visibility: visible !important;
+        /* ══ STREAMLIT HEADER & CHROME CONTROLS ══ */
+        /* Keep header container transparent and interactive so sidebar toggle works */
+        header[data-testid="stHeader"] {
+            background: transparent !important;
+            color: #e6ecf7 !important;
+            height: 3rem !important;
             z-index: 9999 !important;
-            background: linear-gradient(135deg, #22d3ee, #3b82f6) !important;
-            border-radius: 0 8px 8px 0 !important;
-            padding: 10px 6px !important;
-            box-shadow: 4px 0 16px rgba(34,211,238,0.5) !important;
+            visibility: visible !important;
+            display: flex !important;
         }
-        [data-testid="stSidebarCollapsedControl"] svg {
-            fill: #070b14 !important;
+
+        /* Hide unwanted Streamlit branding elements only */
+        #MainMenu { visibility: hidden !important; }
+        footer { visibility: hidden !important; }
+        .stDeployButton { display: none !important; }
+        div[data-testid="stDecoration"] { display: none !important; }
+        div[data-testid="stStatusWidget"] { display: none !important; }
+        div[data-testid="stToolbar"] { visibility: hidden !important; }
+
+        /* ══ SIDEBAR TOGGLE BUTTON (when collapsed) ══ */
+        [data-testid="stSidebarCollapsedControl"],
+        div[data-testid="stSidebarCollapsedControl"],
+        button[data-testid="stSidebarCollapsedControl"],
+        [data-testid="collapsedControl"] {
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: fixed !important;
+            top: 12px !important;
+            left: 12px !important;
+            z-index: 1000000 !important;
+            background: #0d1422 !important;
+            border: 1.5px solid #22d3ee !important;
+            border-radius: 8px !important;
+            padding: 7px 12px !important;
+            box-shadow: 0 0 16px rgba(34, 211, 238, 0.45) !important;
+            cursor: pointer !important;
+            color: #22d3ee !important;
+        }
+
+        [data-testid="stSidebarCollapsedControl"]:hover {
+            background: #13213a !important;
+            border-color: #67e8f9 !important;
+            box-shadow: 0 0 24px rgba(34, 211, 238, 0.75) !important;
+            transform: scale(1.05);
+        }
+
+        [data-testid="stSidebarCollapsedControl"] svg,
+        [data-testid="stSidebarCollapsedControl"] path {
+            fill: #22d3ee !important;
+            stroke: #22d3ee !important;
+        }
+
+        /* Sidebar collapse toggle button (inside sidebar when open) */
+        [data-testid="stSidebarCollapseButton"] button {
+            color: #7d8aa5 !important;
+            border-radius: 6px !important;
+        }
+        [data-testid="stSidebarCollapseButton"] button:hover {
+            color: #22d3ee !important;
+            background: rgba(34, 211, 238, 0.1) !important;
         }
 
         /* Core Canvas */
@@ -250,7 +301,7 @@ def inject_css() -> None:
             border-right: 1px solid #1c2740;
         }
         section[data-testid="stSidebar"] .stRadio > div {
-            gap: 4px;
+            gap: 5px;
         }
         section[data-testid="stSidebar"] .stRadio label {
             background: transparent;
@@ -265,13 +316,27 @@ def inject_css() -> None:
             align-items: center;
         }
         section[data-testid="stSidebar"] .stRadio label:hover {
-            background: rgba(34, 211, 238, 0.06);
+            background: rgba(34, 211, 238, 0.08);
             color: #e6ecf7;
             border-left-color: rgba(34, 211, 238, 0.4);
+            transform: translateX(2px);
+        }
+        /* Active Selected Radio Item */
+        section[data-testid="stSidebar"] .stRadio label:has(input:checked) {
+            background: rgba(34, 211, 238, 0.12) !important;
+            border-left: 3px solid #22d3ee !important;
+            color: #22d3ee !important;
+            font-weight: 600 !important;
+            box-shadow: 0 0 14px rgba(34, 211, 238, 0.15) !important;
+        }
+        /* Hide radio circle so it looks like a clean modern button menu */
+        section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label > div:first-child {
+            display: none !important;
         }
         section[data-testid="stSidebar"] .stRadio [data-testid="stMarkdownContainer"] p {
             font-size: 13px;
             margin: 0;
+            font-weight: 500;
         }
 
         /* Input Controls */
@@ -440,11 +505,11 @@ def sparkline_svg(values: List[int], stroke_color: str = "#22d3ee", fill_color: 
 
 
 # ── Top Bar & Header ──────────────────────────────────────────────────────────
-def render_topbar() -> None:
+def render_topbar(current_page: str = PAGE_SOC_OVERVIEW) -> None:
     now_utc = datetime.now(timezone.utc).strftime("%H:%M:%S")
     st.markdown(
         f"""
-        <div style="display:flex; justify-content:space-between; align-items:flex-end; padding-bottom:12px; border-bottom:1px solid #1c2740; margin-bottom:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; padding-bottom:12px; border-bottom:1px solid #1c2740; margin-bottom:12px;">
             <div>
                 <h2 style="margin:0; font-weight:700; color:#e6ecf7; letter-spacing:-0.02em; font-size:24px;">
                     🛡️ Security Operations Center
@@ -465,6 +530,30 @@ def render_topbar() -> None:
         """,
         unsafe_allow_html=True,
     )
+
+    # Secondary Navigation Bar (accessible always, even when sidebar is collapsed)
+    quick_titles = {
+        PAGE_SOC_OVERVIEW: "📊 Overview",
+        PAGE_ALERTS: "🚨 Alerts",
+        PAGE_INCIDENTS: "📁 Incidents",
+        PAGE_INVESTIGATION: "🔍 Investigate",
+        PAGE_AI_ANALYST: "🤖 AI Analyst",
+        PAGE_RESPONSE_PLAN: "🛡️ Response",
+        PAGE_REPORTS: "📄 Reports",
+        PAGE_THREAT_CONTEXT: "🌐 Threat",
+        PAGE_SYSTEM_HEALTH: "🩺 Health",
+    }
+    q_cols = st.columns(len(NAV_PAGES))
+    for col, page_name in zip(q_cols, NAV_PAGES):
+        with col:
+            is_active = (current_page == page_name)
+            btn_type = "primary" if is_active else "secondary"
+            if st.button(quick_titles.get(page_name, page_name), key=f"top_qnav_{page_name}", type=btn_type, use_container_width=True):
+                st.session_state["_sidebar_nav_radio"] = page_name
+                st.session_state["_active_page"] = page_name
+                st.rerun()
+
+    st.markdown("<div style='margin-bottom:14px;'></div>", unsafe_allow_html=True)
 
 
 # ── System Connections Strip (Part 2b) ────────────────────────────────────────
@@ -871,33 +960,39 @@ def render_sidebar(summary: Dict[str, Any]) -> str:
             unsafe_allow_html=True,
         )
 
-        nav_options = [
-            "SOC Overview",
-            f"Alerts ({alert_count})",
-            f"Incidents ({open_incidents})",
-            "Investigation",
-            "── AI WORKSPACE ──",
-            "AI Analyst",
-            "Response Plan",
-            "Reports",
-            "── INTELLIGENCE ──",
-            "Threat Context",
-            "System Health",
-        ]
+        # Ensure stable navigation state
+        if "_active_page" not in st.session_state or st.session_state["_active_page"] not in NAV_PAGES:
+            st.session_state["_active_page"] = PAGE_SOC_OVERVIEW
+        if "_sidebar_nav_radio" not in st.session_state or st.session_state["_sidebar_nav_radio"] not in NAV_PAGES:
+            st.session_state["_sidebar_nav_radio"] = st.session_state["_active_page"]
 
-        # Filter out separators for index tracking
-        selectable = [opt for opt in nav_options if not opt.startswith("──")]
+        st.markdown(
+            '<div style="font-size:11px; font-weight:700; color:#7d8aa5; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px; padding-left:4px;">CORE OPERATIONS</div>',
+            unsafe_allow_html=True,
+        )
 
-        # Default or restore
-        current_nav = st.session_state.get("_active_page", "SOC Overview")
-        if current_nav not in selectable:
-            current_nav = "SOC Overview"
+        nav_labels = {
+            PAGE_SOC_OVERVIEW: "📊 SOC Overview",
+            PAGE_ALERTS: f"🚨 Alerts ({alert_count:,})",
+            PAGE_INCIDENTS: f"📁 Incidents ({open_incidents:,})",
+            PAGE_INVESTIGATION: "🔍 Investigation",
+            PAGE_AI_ANALYST: "🤖 AI Analyst",
+            PAGE_RESPONSE_PLAN: "🛡️ Response Plan",
+            PAGE_REPORTS: "📄 Reports",
+            PAGE_THREAT_CONTEXT: "🌐 Threat Context",
+            PAGE_SYSTEM_HEALTH: "🩺 System Health",
+        }
+
+        current_page = st.session_state["_sidebar_nav_radio"]
+        current_index = NAV_PAGES.index(current_page) if current_page in NAV_PAGES else 0
 
         choice = st.radio(
             "Navigation",
-            options=selectable,
-            index=selectable.index(current_nav) if current_nav in selectable else 0,
+            options=NAV_PAGES,
+            index=current_index,
+            format_func=lambda page: nav_labels.get(page, page),
             label_visibility="collapsed",
+            key="_sidebar_nav_radio",
         )
         st.session_state["_active_page"] = choice
 
@@ -1263,13 +1358,15 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
             with b_col2:
                 if st.button("🛡️ Response Plan", key=f"btn_resp_{selected_inc_id}", use_container_width=True):
                     st.session_state["_active_incident_id"] = selected_inc_id
-                    st.session_state["_active_page"] = "Response Plan"
-                    st.rerun(scope="app")  # must rerun full app to trigger page dispatch
+                    st.session_state["_active_page"] = PAGE_RESPONSE_PLAN
+                    st.session_state["_sidebar_nav_radio"] = PAGE_RESPONSE_PLAN
+                    st.rerun(scope="app")
             with b_col3:
                 if st.button("📄 Executive Report", key=f"btn_rep_{selected_inc_id}", use_container_width=True):
                     st.session_state["_active_incident_id"] = selected_inc_id
-                    st.session_state["_active_page"] = "Reports"
-                    st.rerun(scope="app")  # must rerun full app to trigger page dispatch
+                    st.session_state["_active_page"] = PAGE_REPORTS
+                    st.session_state["_sidebar_nav_radio"] = PAGE_REPORTS
+                    st.rerun(scope="app")
 
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1439,14 +1536,18 @@ def page_alerts() -> None:
     max_pages = max(1, math.ceil(total / page_limit))
     p_col1, p_col2, p_col3 = st.columns([1, 2, 1])
     with p_col1:
-        if st.button("◀ Previous Page", disabled=(page_num <= 1), use_container_width=True):
-            st.session_state["_alerts_page_num"] = page_num - 1
+        if st.button("◀ Previous Page", key="alerts_prev_page_btn", disabled=(page_num <= 1), use_container_width=True):
+            st.session_state["_alerts_page_num"] = max(1, page_num - 1)
+            st.session_state["_active_page"] = PAGE_ALERTS
+            st.session_state["_sidebar_nav_radio"] = PAGE_ALERTS
             st.rerun()
     with p_col2:
         st.markdown(f"<div style='text-align:center; color:#7d8aa5; font-size:13px; padding-top:8px;'>Page <b>{page_num}</b> of <b>{max_pages}</b></div>", unsafe_allow_html=True)
     with p_col3:
-        if st.button("Next Page ▶", disabled=(page_num >= max_pages), use_container_width=True):
-            st.session_state["_alerts_page_num"] = page_num + 1
+        if st.button("Next Page ▶", key="alerts_next_page_btn", disabled=(page_num >= max_pages), use_container_width=True):
+            st.session_state["_alerts_page_num"] = min(max_pages, page_num + 1)
+            st.session_state["_active_page"] = PAGE_ALERTS
+            st.session_state["_sidebar_nav_radio"] = PAGE_ALERTS
             st.rerun()
 
     # Alert Inspector
@@ -1519,7 +1620,8 @@ def page_incidents() -> None:
                     )
                     if st.button(f"🔍 Investigate Incident #{inc_id}", key=f"inv_btn_{inc_id}", use_container_width=True):
                         st.session_state["_active_incident_id"] = inc_id
-                        st.session_state["_active_page"] = "Investigation"
+                        st.session_state["_active_page"] = PAGE_INVESTIGATION
+                        st.session_state["_sidebar_nav_radio"] = PAGE_INVESTIGATION
                         st.rerun()
 
 
@@ -2137,16 +2239,50 @@ def page_system_health() -> None:
             st.error(str(exc))
 
 
+def ensure_sidebar_open_js() -> None:
+    """Injects a lightweight script ensuring the sidebar open toggle is active and accessible."""
+    try:
+        import streamlit.components.v1 as components
+        components.html(
+            """
+            <script>
+            (function() {
+                function checkSidebar() {
+                    try {
+                        const doc = window.parent.document;
+                        if (!doc) return;
+                        const sidebar = doc.querySelector('section[data-testid="stSidebar"]');
+                        const toggleBtn = doc.querySelector('[data-testid="stSidebarCollapsedControl"]');
+                        if (toggleBtn && (!sidebar || sidebar.getAttribute('aria-expanded') === 'false')) {
+                            const btn = toggleBtn.querySelector('button') || toggleBtn;
+                            if (btn && btn.click) {
+                                btn.click();
+                            }
+                        }
+                    } catch (e) {}
+                }
+                setTimeout(checkSidebar, 250);
+            })();
+            </script>
+            """,
+            height=0,
+            width=0,
+        )
+    except Exception:
+        pass
+
+
 # ── Main Entrypoint ───────────────────────────────────────────────────────────
 def main() -> None:
     inject_css()
+    ensure_sidebar_open_js()
 
     # Load initial dashboard summary
     summary: Dict[str, Any] = {}
     try:
         summary = api_get("/api/dashboard/summary")
     except Exception as exc:
-        render_topbar()
+        render_topbar(PAGE_SOC_OVERVIEW)
         render_error_card(
             "Backend Service Unavailable",
             str(exc),
@@ -2155,27 +2291,29 @@ def main() -> None:
         st.stop()
 
     active_page = render_sidebar(summary)
-    render_topbar()
+    render_topbar(active_page)
 
     # Page Dispatcher
-    if active_page == "SOC Overview":
+    if active_page == PAGE_SOC_OVERVIEW:
         page_soc_overview(summary)
-    elif active_page.startswith("Alerts"):
+    elif active_page == PAGE_ALERTS:
         page_alerts()
-    elif active_page.startswith("Incidents"):
+    elif active_page == PAGE_INCIDENTS:
         page_incidents()
-    elif active_page == "Investigation":
+    elif active_page == PAGE_INVESTIGATION:
         page_investigation()
-    elif active_page == "AI Analyst":
+    elif active_page == PAGE_AI_ANALYST:
         page_ai_analyst()
-    elif active_page == "Response Plan":
+    elif active_page == PAGE_RESPONSE_PLAN:
         page_response_plan()
-    elif active_page == "Reports":
+    elif active_page == PAGE_REPORTS:
         page_reports()
-    elif active_page == "Threat Context":
+    elif active_page == PAGE_THREAT_CONTEXT:
         page_threat_context()
-    elif active_page == "System Health":
+    elif active_page == PAGE_SYSTEM_HEALTH:
         page_system_health()
+    else:
+        page_soc_overview(summary)
 
 
 if __name__ == "__main__":
