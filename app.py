@@ -17,7 +17,7 @@ st.set_page_config(
     page_title="SENTINEL AI · SOC Analyst",
     page_icon="🛡️",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 BACKEND_URL = st.secrets.get("BACKEND_API_URL", "http://127.0.0.1:8000").rstrip("/")
@@ -104,49 +104,37 @@ def inject_css() -> None:
         div[data-testid="stStatusWidget"] { display: none !important; }
         div[data-testid="stToolbar"] { visibility: hidden !important; }
 
-        /* ══ SIDEBAR COLLAPSED REOPEN BUTTON ══ */
+        /* ══ SIDEBAR PERMANENTLY REMOVED ══ */
+        section[data-testid="stSidebar"],
+        [data-testid="stSidebar"],
         [data-testid="stSidebarCollapsedControl"],
         div[data-testid="stSidebarCollapsedControl"],
         button[data-testid="stSidebarCollapsedControl"],
-        [data-testid="collapsedControl"] {
-            display: flex !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            position: fixed !important;
-            top: 14px !important;
-            left: 14px !important;
-            z-index: 1000000 !important;
-            background: #0d1422 !important;
-            border: 1.5px solid #22d3ee !important;
-            border-radius: 10px !important;
-            padding: 8px 12px !important;
-            box-shadow: 0 0 20px rgba(34, 211, 238, 0.45) !important;
-            cursor: pointer !important;
-            color: #22d3ee !important;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        [data-testid="collapsedControl"],
+        [data-testid="stSidebarCollapseButton"] {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-width: 0 !important;
+            max-width: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            left: -9999px !important;
+            transform: translateX(-9999px) !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
-        [data-testid="stSidebarCollapsedControl"]:hover {
-            background: #13213a !important;
-            border-color: #67e8f9 !important;
-            box-shadow: 0 0 28px rgba(34, 211, 238, 0.75) !important;
-            transform: scale(1.06);
-        }
-
-        [data-testid="stSidebarCollapsedControl"] svg,
-        [data-testid="stSidebarCollapsedControl"] path {
-            fill: #22d3ee !important;
-            stroke: #22d3ee !important;
-        }
-
-        [data-testid="stSidebarCollapseButton"] button {
-            color: #7d8aa5 !important;
-            border-radius: 6px !important;
-            transition: all 0.2s ease;
-        }
-        [data-testid="stSidebarCollapseButton"] button:hover {
-            color: #22d3ee !important;
-            background: rgba(34, 211, 238, 0.1) !important;
+        /* Full width canvas without sidebar offset */
+        .stMainBlockContainer,
+        [data-testid="stMainBlockContainer"],
+        .main .block-container {
+            max-width: 100% !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+            padding-top: 1.5rem !important;
         }
 
         /* ══ CORE CANVAS & TYPOGRAPHY ══ */
@@ -401,46 +389,9 @@ def inject_css() -> None:
             box-shadow: 0 0 16px rgba(34, 211, 238, 0.3) !important;
         }
 
-        /* ══ SIDEBAR STYLING ══ */
+        /* ══ FULL CANVAS LAYOUT OPTIMIZATION ══ */
         section[data-testid="stSidebar"] {
-            background-color: #080d19 !important;
-            border-right: 1px solid rgba(255, 255, 255, 0.07);
-        }
-        section[data-testid="stSidebar"] .stRadio > div {
-            gap: 5px;
-        }
-        section[data-testid="stSidebar"] .stRadio label {
-            background: transparent;
-            padding: 9px 12px;
-            border-radius: 9px;
-            border-left: 3px solid transparent;
-            color: #94a3b8;
-            font-weight: 500;
-            transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer !important;
-            display: flex !important;
-            align-items: center;
-        }
-        section[data-testid="stSidebar"] .stRadio label:hover {
-            background: rgba(34, 211, 238, 0.08);
-            color: #e6ecf7;
-            border-left-color: rgba(34, 211, 238, 0.4);
-            transform: translateX(3px);
-        }
-        section[data-testid="stSidebar"] .stRadio label:has(input:checked) {
-            background: linear-gradient(90deg, rgba(34, 211, 238, 0.14) 0%, rgba(34, 211, 238, 0.03) 100%) !important;
-            border-left: 3px solid #22d3ee !important;
-            color: #22d3ee !important;
-            font-weight: 600 !important;
-            box-shadow: inset 0 0 16px rgba(34, 211, 238, 0.06);
-        }
-        section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label > div:first-child {
             display: none !important;
-        }
-        section[data-testid="stSidebar"] .stRadio [data-testid="stMarkdownContainer"] p {
-            font-size: 13px;
-            margin: 0;
-            font-weight: 500;
         }
 
         /* ══ FORM CONTROLS & INPUTS ══ */
@@ -625,8 +576,8 @@ def sparkline_svg(values: List[int], stroke_color: str = "#22d3ee", fill_color: 
     """
 
 
-# ── Top Bar & Header ──────────────────────────────────────────────────────────
-def render_topbar(current_page: str = PAGE_SOC_OVERVIEW) -> None:
+# ── Top Bar & Primary Header Navigation ───────────────────────────────────────
+def render_topbar(current_page: str = PAGE_SOC_OVERVIEW, summary: Optional[Dict[str, Any]] = None) -> None:
     now_utc = datetime.now(timezone.utc).strftime("%H:%M:%S")
     st.html(
         f"""
@@ -662,11 +613,13 @@ def render_topbar(current_page: str = PAGE_SOC_OVERVIEW) -> None:
         """
     )
 
-    # Secondary Navigation Bar (accessible always, even when sidebar is collapsed)
+    # Primary Navigation Bar (clean horizontal navbar)
+    alert_count = summary.get("alert_count", 0) if summary else 0
+    open_incidents = summary.get("open_incident_count", 0) if summary else 0
     quick_titles = {
         PAGE_SOC_OVERVIEW: "📊 Overview",
-        PAGE_ALERTS: "🚨 Alerts",
-        PAGE_INCIDENTS: "📁 Incidents",
+        PAGE_ALERTS: f"🚨 Alerts ({alert_count:,})" if alert_count else "🚨 Alerts",
+        PAGE_INCIDENTS: f"📁 Incidents ({open_incidents:,})" if open_incidents else "📁 Incidents",
         PAGE_INVESTIGATION: "🔍 Investigate",
         PAGE_AI_ANALYST: "🤖 AI Analyst",
         PAGE_RESPONSE_PLAN: "🛡️ Response",
@@ -1084,95 +1037,12 @@ def render_error_card(title: str, detail: str, hint: Optional[str] = None) -> No
     )
 
 
-# ── Navigation / Sidebar ──────────────────────────────────────────────────────
+# ── Navigation / Sidebar (Removed) ────────────────────────────────────────────
 def render_sidebar(summary: Dict[str, Any]) -> str:
-    alert_count = summary.get("alert_count", 0)
-    open_incidents = summary.get("open_incident_count", 0)
-
-    with st.sidebar:
-        # Brand Logo block
-        st.markdown(
-            """
-            <div style="display:flex; align-items:center; gap:12px; padding:12px 6px 20px 6px; border-bottom:1px solid #1c2740; margin-bottom:16px;">
-                <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, #22d3ee 0%, #8b5cf6 100%); display:flex; align-items:center; justify-content:center; box-shadow:0 0 16px rgba(34,211,238,0.4);">
-                    <span style="font-size:22px;">🛡️</span>
-                </div>
-                <div>
-                    <div style="font-weight:800; font-size:16px; letter-spacing:0.04em; color:#e6ecf7; line-height:1.1;">SENTINEL AI</div>
-                    <div style="font-size:11px; font-weight:600; color:#22d3ee; letter-spacing:0.08em;">SOC PLATFORM</div>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        # Ensure stable navigation state
-        if "_active_page" not in st.session_state or st.session_state["_active_page"] not in NAV_PAGES:
-            st.session_state["_active_page"] = PAGE_SOC_OVERVIEW
-
-        st.markdown(
-            '<div style="font-size:11px; font-weight:700; color:#7d8aa5; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px; padding-left:4px;">CORE OPERATIONS</div>',
-            unsafe_allow_html=True,
-        )
-
-        nav_labels = {
-            PAGE_SOC_OVERVIEW: "📊 SOC Overview",
-            PAGE_ALERTS: f"🚨 Alerts ({alert_count:,})",
-            PAGE_INCIDENTS: f"📁 Incidents ({open_incidents:,})",
-            PAGE_INVESTIGATION: "🔍 Investigation",
-            PAGE_AI_ANALYST: "🤖 AI Analyst",
-            PAGE_RESPONSE_PLAN: "🛡️ Response Plan",
-            PAGE_REPORTS: "📄 Reports",
-            PAGE_THREAT_CONTEXT: "🌐 Threat Context",
-            PAGE_SYSTEM_HEALTH: "🩺 System Health",
-        }
-
-        current_page = st.session_state["_active_page"]
-        current_index = NAV_PAGES.index(current_page) if current_page in NAV_PAGES else 0
-
-        choice = st.radio(
-            "Navigation",
-            options=NAV_PAGES,
-            index=current_index,
-            format_func=lambda page: nav_labels.get(page, page),
-            label_visibility="collapsed",
-        )
-        st.session_state["_active_page"] = choice
-
-        # Spacer
-        st.markdown("<div style='height:30px;'></div>", unsafe_allow_html=True)
-
-        # Footer Status Card
-        conn_data = st.session_state.get("_last_system_conn", {})
-        wz_st = conn_data.get("wazuh", {}).get("status", "ok") if conn_data else "ok"
-        gq_st = conn_data.get("groq", {}).get("status", "ok") if conn_data else "ok"
-        gq_models = conn_data.get("groq", {}).get("models", []) if conn_data else []
-        active_model = gq_models[0].split("/")[-1] if gq_models else "gpt-oss-20b"
-
-        wz_dot = "dot-green" if wz_st == "ok" else ("dot-amber" if wz_st == "degraded" else "dot-red")
-        gq_dot = "dot-green" if gq_st == "ok" else "dot-red"
-
-        st.markdown(
-            f"""
-            <div style="background:#0d1422; border:1px solid #1c2740; border-radius:12px; padding:12px; margin-top:20px;">
-                <div style="font-size:10px; font-weight:700; color:#7d8aa5; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">Live Telemetry</div>
-                <div style="display:flex; align-items:center; margin-bottom:6px;">
-                    <span class="status-dot {wz_dot}"></span>
-                    <span style="font-size:12px; color:#e6ecf7;">Wazuh SIEM connected</span>
-                </div>
-                <div style="display:flex; align-items:center; margin-bottom:6px;">
-                    <span class="status-dot {gq_dot}"></span>
-                    <span class="mono" style="font-size:12px; color:#22d3ee;">Groq · {html.escape(active_model)}</span>
-                </div>
-                <div style="border-top:1px solid #1c2740; padding-top:6px; margin-top:6px; font-size:10px; color:#7d8aa5;">
-                    🔄 Auto-refreshes every 2 min
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        return choice
+    """Maintains active page session state without rendering sidebar."""
+    if "_active_page" not in st.session_state or st.session_state["_active_page"] not in NAV_PAGES:
+        st.session_state["_active_page"] = PAGE_SOC_OVERVIEW
+    return st.session_state["_active_page"]
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -2327,42 +2197,13 @@ def page_system_health() -> None:
 
 
 def ensure_sidebar_open_js() -> None:
-    """Injects a lightweight script ensuring the sidebar open toggle is active and accessible."""
-    try:
-        import streamlit.components.v1 as components
-        components.html(
-            """
-            <script>
-            (function() {
-                function checkSidebar() {
-                    try {
-                        const doc = window.parent.document;
-                        if (!doc) return;
-                        const sidebar = doc.querySelector('section[data-testid="stSidebar"]');
-                        const toggleBtn = doc.querySelector('[data-testid="stSidebarCollapsedControl"]');
-                        if (toggleBtn && (!sidebar || sidebar.getAttribute('aria-expanded') === 'false')) {
-                            const btn = toggleBtn.querySelector('button') || toggleBtn;
-                            if (btn && btn.click) {
-                                btn.click();
-                            }
-                        }
-                    } catch (e) {}
-                }
-                setTimeout(checkSidebar, 250);
-            })();
-            </script>
-            """,
-            height=0,
-            width=0,
-        )
-    except Exception:
-        pass
+    """No-op: Sidebar removed."""
+    pass
 
 
 # ── Main Entrypoint ───────────────────────────────────────────────────────────
 def main() -> None:
     inject_css()
-    ensure_sidebar_open_js()
 
     # Load initial dashboard summary
     summary: Dict[str, Any] = {}
@@ -2377,8 +2218,11 @@ def main() -> None:
         )
         st.stop()
 
-    active_page = render_sidebar(summary)
-    render_topbar(active_page)
+    if "_active_page" not in st.session_state or st.session_state["_active_page"] not in NAV_PAGES:
+        st.session_state["_active_page"] = PAGE_SOC_OVERVIEW
+    active_page = st.session_state["_active_page"]
+
+    render_topbar(active_page, summary)
 
     # Page Dispatcher
     if active_page == PAGE_SOC_OVERVIEW:
