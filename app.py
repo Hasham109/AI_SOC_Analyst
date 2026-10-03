@@ -188,11 +188,32 @@ def inject_css() -> None:
             padding: 8px 16px;
             box-shadow: 0 4px 18px rgba(34, 211, 238, 0.3);
             transition: all 0.2s ease;
+            cursor: pointer !important;
+            position: relative;
+            z-index: 2;
+            pointer-events: auto !important;
         }
         div.stButton > button:hover {
             box-shadow: 0 6px 24px rgba(34, 211, 238, 0.5);
             transform: translateY(-1px);
             color: #000 !important;
+        }
+        div.stButton > button:active {
+            transform: translateY(0px);
+            box-shadow: 0 2px 8px rgba(34, 211, 238, 0.3);
+        }
+        div.stDownloadButton > button {
+            background: rgba(139, 92, 246, 0.15) !important;
+            color: #c4b5fd !important;
+            border: 1px solid rgba(139, 92, 246, 0.4) !important;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer !important;
+            transition: all 0.2s ease;
+        }
+        div.stDownloadButton > button:hover {
+            background: rgba(139, 92, 246, 0.28) !important;
+            box-shadow: 0 4px 18px rgba(139, 92, 246, 0.35);
         }
 
         /* Sidebar Styling */
@@ -205,16 +226,24 @@ def inject_css() -> None:
         }
         section[data-testid="stSidebar"] .stRadio label {
             background: transparent;
-            padding: 8px 12px;
+            padding: 9px 12px;
             border-radius: 8px;
             border-left: 3px solid transparent;
             color: #94a3b8;
             font-weight: 500;
             transition: all 0.15s ease;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center;
         }
         section[data-testid="stSidebar"] .stRadio label:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(34, 211, 238, 0.06);
             color: #e6ecf7;
+            border-left-color: rgba(34, 211, 238, 0.4);
+        }
+        section[data-testid="stSidebar"] .stRadio [data-testid="stMarkdownContainer"] p {
+            font-size: 13px;
+            margin: 0;
         }
 
         /* Input Controls */
@@ -758,6 +787,24 @@ def render_kpis(summary: Dict[str, Any], alerts_sample: List[Dict[str, Any]]) ->
 
 
 # ── Render Error Card ─────────────────────────────────────────────────────────
+def render_page_header(icon: str, title: str, subtitle: str) -> None:
+    """Styled page section header replacing bare st.markdown('### ...')."""
+    st.markdown(
+        f"""
+        <div style="margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid #1c2740;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:22px;">{icon}</span>
+                <div>
+                    <h2 style="margin:0; font-size:20px; font-weight:700; color:#e6ecf7; letter-spacing:-0.01em;">{html.escape(title)}</h2>
+                    <div style="font-size:12px; color:#7d8aa5; margin-top:2px;">{html.escape(subtitle)}</div>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def render_error_card(title: str, detail: str, hint: Optional[str] = None) -> None:
     st.markdown(
         f"""
@@ -1182,19 +1229,19 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                                 st.session_state[f"_triage_finding_{selected_inc_id}"] = finding
                                 st.session_state[f"_conf_{selected_inc_id}"] = conf.upper()
                                 st.session_state[f"_triage_res_{selected_inc_id}"] = t_res
-                                st.rerun()
+                                st.rerun(scope="app")  # full rerun to show result in place
                         except Exception as e:
                             render_error_card("Triage Request Failed", str(e))
             with b_col2:
                 if st.button("🛡️ Response Plan", key=f"btn_resp_{selected_inc_id}", use_container_width=True):
                     st.session_state["_active_incident_id"] = selected_inc_id
                     st.session_state["_active_page"] = "Response Plan"
-                    st.rerun()
+                    st.rerun(scope="app")  # must rerun full app to trigger page dispatch
             with b_col3:
                 if st.button("📄 Executive Report", key=f"btn_rep_{selected_inc_id}", use_container_width=True):
                     st.session_state["_active_incident_id"] = selected_inc_id
                     st.session_state["_active_page"] = "Reports"
-                    st.rerun()
+                    st.rerun(scope="app")  # must rerun full app to trigger page dispatch
 
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1245,19 +1292,23 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                         icon="🛡️",
                     )
                     time.sleep(1)
-                    st.rerun()
+                    st.rerun(scope="app")  # refresh whole dashboard after ingestion
                 except Exception as exc:
                     st.error(f"Manual ingestion failed: {exc}")
     with ingest_col2:
-        st.caption("Manual ingestion immediately scans Wazuh indexer/API for fresh security events and auto-simulates attacks if SIEM is quiet.")
+        st.markdown(
+            '<div style="font-size:12px; color:#7d8aa5; padding-top:6px;">'
+            'Manual ingestion immediately scans Wazuh indexer/API for fresh security events and auto-simulates attacks if SIEM is quiet.'
+            '</div>',
+            unsafe_allow_html=True,
+        )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 2: ALERTS EXPLORER
 # ══════════════════════════════════════════════════════════════════════════════
 def page_alerts() -> None:
-    st.markdown("### 📋 Security Alerts Explorer")
-    st.caption("Search, filter, and inspect normalized Wazuh SIEM security events.")
+    render_page_header("📋", "Security Alerts Explorer", "Search, filter, and inspect normalized Wazuh SIEM security events.")
 
     # Filter controls
     f_col1, f_col2, f_col3 = st.columns([1.5, 2.5, 1])
@@ -1386,8 +1437,7 @@ def page_alerts() -> None:
 # PAGE 3: INCIDENTS
 # ══════════════════════════════════════════════════════════════════════════════
 def page_incidents() -> None:
-    st.markdown("### 🚨 Correlated Security Incidents")
-    st.caption("Automated attack clustering by host, IP fingerprint, and correlation windows.")
+    render_page_header("🚨", "Correlated Security Incidents", "Automated attack clustering by host, IP fingerprint, and correlation windows.")
 
     try:
         incidents = api_get("/api/incidents")
@@ -1407,7 +1457,7 @@ def page_incidents() -> None:
         cols = st.columns(2)
         for idx, inc in enumerate(row_incs):
             inc_id = inc.get("id")
-            title = html.escape(str(inc.get("title", "Security Incident")))
+            inc_title = html.escape(str(inc.get("title", "Security Incident")))
             sev = inc.get("severity", "medium").lower()
             status = html.escape(str(inc.get("status", "open")).upper())
             first_seen = (inc.get("first_seen") or "-")[:19].replace("T", " ")
@@ -1415,41 +1465,41 @@ def page_incidents() -> None:
             repeat_cnt = inc.get("repeat_count", 1)
 
             with cols[idx]:
-                st.markdown(
-                    f"""
-                    <div class="soc-card">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <div>
-                                <span class="mono" style="font-size:12px; color:#22d3ee; font-weight:700;">INCIDENT #{inc_id}</span>
-                                <h4 style="margin:4px 0 8px 0; color:#e6ecf7; font-size:15px;">{title}</h4>
+                # Use a container so the button is properly inside the card context
+                with st.container():
+                    st.markdown(
+                        f"""
+                        <div class="soc-card" style="margin-bottom:4px;">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                <div>
+                                    <span class="mono" style="font-size:12px; color:#22d3ee; font-weight:700;">INCIDENT #{inc_id}</span>
+                                    <div style="margin:4px 0 8px 0; color:#e6ecf7; font-size:14px; font-weight:600;">{inc_title}</div>
+                                </div>
+                                <div style="text-align:right;">
+                                    {severity_pill(sev)}
+                                    <div class="mono" style="font-size:10px; color:#7d8aa5; margin-top:4px;">STATUS: {status}</div>
+                                </div>
                             </div>
-                            <div style="text-align:right;">
-                                {severity_pill(sev)}
-                                <div class="mono" style="font-size:10px; color:#7d8aa5; margin-top:4px;">STATUS: {status}</div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:12px 0; font-size:11px;">
+                                <div><span style="color:#7d8aa5;">FIRST SEEN:</span> <span class="mono" style="color:#e6ecf7;">{first_seen}</span></div>
+                                <div><span style="color:#7d8aa5;">LAST SEEN:</span> <span class="mono" style="color:#e6ecf7;">{last_seen}</span></div>
+                                <div><span style="color:#7d8aa5;">REPEATS:</span> <span class="mono" style="color:#22d3ee; font-weight:700;">{repeat_cnt}x</span></div>
                             </div>
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:12px 0; font-size:11px;">
-                            <div><span style="color:#7d8aa5;">FIRST SEEN:</span> <span class="mono" style="color:#e6ecf7;">{first_seen}</span></div>
-                            <div><span style="color:#7d8aa5;">LAST SEEN:</span> <span class="mono" style="color:#e6ecf7;">{last_seen}</span></div>
-                            <div><span style="color:#7d8aa5;">REPEATS:</span> <span class="mono" style="color:#22d3ee; font-weight:700;">{repeat_cnt}x</span></div>
-                        </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-                if st.button(f"🔍 Investigate Incident #{inc_id}", key=f"inv_btn_{inc_id}", use_container_width=True):
-                    st.session_state["_active_incident_id"] = inc_id
-                    st.session_state["_active_page"] = "Investigation"
-                    st.rerun()
-
-                st.markdown("</div>", unsafe_allow_html=True)
+                        """,
+                        unsafe_allow_html=True,
+                    )
+                    if st.button(f"🔍 Investigate Incident #{inc_id}", key=f"inv_btn_{inc_id}", use_container_width=True):
+                        st.session_state["_active_incident_id"] = inc_id
+                        st.session_state["_active_page"] = "Investigation"
+                        st.rerun()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 4: INVESTIGATION
 # ══════════════════════════════════════════════════════════════════════════════
 def page_investigation() -> None:
-    st.markdown("### 🔬 Incident Deep-Dive & Root-Cause Analysis")
+    render_page_header("🔬", "Incident Deep-Dive & Root-Cause Analysis", "AI-powered attack chain reconstruction and forensic evidence correlation.")
 
     try:
         incidents = api_get("/api/incidents")
@@ -1598,8 +1648,7 @@ def page_investigation() -> None:
 # PAGE 5: AI ANALYST WORKSPACE
 # ══════════════════════════════════════════════════════════════════════════════
 def page_ai_analyst() -> None:
-    st.markdown("### 🤖 Multi-Perspective AI Analyst")
-    st.caption("Direct interaction with Groq reasoning engines across Triage, Investigation, and Manager Explanations.")
+    render_page_header("🤖", "Multi-Perspective AI Analyst", "Direct interaction with Groq reasoning engines across Triage, Investigation, and Manager Explanations.")
 
     try:
         incidents = api_get("/api/incidents")
@@ -1721,8 +1770,7 @@ def page_ai_analyst() -> None:
 # PAGE 6: RESPONSE PLAN
 # ══════════════════════════════════════════════════════════════════════════════
 def page_response_plan() -> None:
-    st.markdown("### 🛡️ Defensive Response Planning")
-    st.caption("Tailored remediation steps, operational impact assessments, and rollback procedures.")
+    render_page_header("🛡️", "Defensive Response Planning", "Tailored remediation steps, operational impact assessments, and rollback procedures.")
 
     # Human in the Loop Warning
     st.markdown(
@@ -1810,8 +1858,7 @@ def page_response_plan() -> None:
 # PAGE 7: REPORTS
 # ══════════════════════════════════════════════════════════════════════════════
 def page_reports() -> None:
-    st.markdown("### 📄 Executive & Technical Incident Reporting")
-    st.caption("Generate formal post-incident documentation for leadership and compliance auditing.")
+    render_page_header("📄", "Executive & Technical Incident Reporting", "Generate formal post-incident documentation for leadership and compliance auditing.")
 
     try:
         incidents = api_get("/api/incidents")
@@ -1928,8 +1975,7 @@ def page_reports() -> None:
 # PAGE 8: THREAT CONTEXT
 # ══════════════════════════════════════════════════════════════════════════════
 def page_threat_context() -> None:
-    st.markdown("### 🌐 Threat Intelligence Context & Enrichment")
-    st.caption("RFC-1918 Private classification and public threat reputation lookups.")
+    render_page_header("🌐", "Threat Intelligence Context & Enrichment", "RFC-1918 Private classification and public threat reputation lookups.")
 
     ip_input = st.text_input("Enter Target IP Address", value="10.144.85.20", placeholder="e.g. 192.168.1.1 or 8.8.8.8")
     if st.button("Analyze IP Reputation", use_container_width=True):
@@ -1975,8 +2021,7 @@ def page_threat_context() -> None:
 # PAGE 9: SYSTEM HEALTH
 # ══════════════════════════════════════════════════════════════════════════════
 def page_system_health() -> None:
-    st.markdown("### 🩺 SIEM & Pipeline System Health")
-    st.caption("Detailed diagnostics for Backend API, Database, Wazuh Manager/Indexer, and Groq LLM engines.")
+    render_page_header("🩺", "SIEM & Pipeline System Health", "Detailed diagnostics for Backend API, Database, Wazuh Manager/Indexer, and Groq LLM engines.")
 
     col_btn, col_blank = st.columns([1.5, 3])
     with col_btn:
