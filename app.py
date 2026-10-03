@@ -63,12 +63,24 @@ def inject_css() -> None:
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-        /* Hide Streamlit Chrome */
+        /* Hide Streamlit Chrome — keep sidebar toggle visible */
         #MainMenu {visibility: hidden;}
-        header {visibility: hidden;}
         footer {visibility: hidden;}
         .stDeployButton {display: none;}
         div[data-testid="stDecoration"] {display: none;}
+
+        /* Hide header branding but NOT the sidebar expand/collapse button */
+        header[data-testid="stHeader"] {visibility: hidden; height: 0; padding: 0;}
+        header[data-testid="stHeader"] > * {visibility: hidden;}
+
+        /* Always show sidebar collapse/expand control */
+        [data-testid="stSidebarCollapsedControl"],
+        [data-testid="collapsedControl"],
+        button[data-testid="baseButton-headerNoPadding"] {
+            visibility: visible !important;
+            opacity: 1 !important;
+            display: flex !important;
+        }
 
         /* Core Canvas */
         .stApp {
