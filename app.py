@@ -549,7 +549,6 @@ def render_topbar(current_page: str = PAGE_SOC_OVERVIEW) -> None:
             is_active = (current_page == page_name)
             btn_type = "primary" if is_active else "secondary"
             if st.button(quick_titles.get(page_name, page_name), key=f"top_qnav_{page_name}", type=btn_type, use_container_width=True):
-                st.session_state["_sidebar_nav_radio"] = page_name
                 st.session_state["_active_page"] = page_name
                 st.rerun()
 
@@ -963,8 +962,6 @@ def render_sidebar(summary: Dict[str, Any]) -> str:
         # Ensure stable navigation state
         if "_active_page" not in st.session_state or st.session_state["_active_page"] not in NAV_PAGES:
             st.session_state["_active_page"] = PAGE_SOC_OVERVIEW
-        if "_sidebar_nav_radio" not in st.session_state or st.session_state["_sidebar_nav_radio"] not in NAV_PAGES:
-            st.session_state["_sidebar_nav_radio"] = st.session_state["_active_page"]
 
         st.markdown(
             '<div style="font-size:11px; font-weight:700; color:#7d8aa5; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px; padding-left:4px;">CORE OPERATIONS</div>',
@@ -983,7 +980,7 @@ def render_sidebar(summary: Dict[str, Any]) -> str:
             PAGE_SYSTEM_HEALTH: "🩺 System Health",
         }
 
-        current_page = st.session_state["_sidebar_nav_radio"]
+        current_page = st.session_state["_active_page"]
         current_index = NAV_PAGES.index(current_page) if current_page in NAV_PAGES else 0
 
         choice = st.radio(
@@ -992,7 +989,6 @@ def render_sidebar(summary: Dict[str, Any]) -> str:
             index=current_index,
             format_func=lambda page: nav_labels.get(page, page),
             label_visibility="collapsed",
-            key="_sidebar_nav_radio",
         )
         st.session_state["_active_page"] = choice
 
@@ -1359,13 +1355,11 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                 if st.button("🛡️ Response Plan", key=f"btn_resp_{selected_inc_id}", use_container_width=True):
                     st.session_state["_active_incident_id"] = selected_inc_id
                     st.session_state["_active_page"] = PAGE_RESPONSE_PLAN
-                    st.session_state["_sidebar_nav_radio"] = PAGE_RESPONSE_PLAN
                     st.rerun(scope="app")
             with b_col3:
                 if st.button("📄 Executive Report", key=f"btn_rep_{selected_inc_id}", use_container_width=True):
                     st.session_state["_active_incident_id"] = selected_inc_id
                     st.session_state["_active_page"] = PAGE_REPORTS
-                    st.session_state["_sidebar_nav_radio"] = PAGE_REPORTS
                     st.rerun(scope="app")
 
         st.markdown("</div>", unsafe_allow_html=True)
@@ -1539,7 +1533,6 @@ def page_alerts() -> None:
         if st.button("◀ Previous Page", key="alerts_prev_page_btn", disabled=(page_num <= 1), use_container_width=True):
             st.session_state["_alerts_page_num"] = max(1, page_num - 1)
             st.session_state["_active_page"] = PAGE_ALERTS
-            st.session_state["_sidebar_nav_radio"] = PAGE_ALERTS
             st.rerun()
     with p_col2:
         st.markdown(f"<div style='text-align:center; color:#7d8aa5; font-size:13px; padding-top:8px;'>Page <b>{page_num}</b> of <b>{max_pages}</b></div>", unsafe_allow_html=True)
@@ -1547,7 +1540,6 @@ def page_alerts() -> None:
         if st.button("Next Page ▶", key="alerts_next_page_btn", disabled=(page_num >= max_pages), use_container_width=True):
             st.session_state["_alerts_page_num"] = min(max_pages, page_num + 1)
             st.session_state["_active_page"] = PAGE_ALERTS
-            st.session_state["_sidebar_nav_radio"] = PAGE_ALERTS
             st.rerun()
 
     # Alert Inspector
@@ -1621,7 +1613,6 @@ def page_incidents() -> None:
                     if st.button(f"🔍 Investigate Incident #{inc_id}", key=f"inv_btn_{inc_id}", use_container_width=True):
                         st.session_state["_active_incident_id"] = inc_id
                         st.session_state["_active_page"] = PAGE_INVESTIGATION
-                        st.session_state["_sidebar_nav_radio"] = PAGE_INVESTIGATION
                         st.rerun()
 
 
