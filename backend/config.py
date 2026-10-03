@@ -66,7 +66,7 @@ class Settings(BaseSettings):
     aws_bedrock_max_tokens: int = Field(default=1200, ge=128, le=8192)
     wazuh_verify_tls: bool = False
 
-        @field_validator(
+    @field_validator(
         "llm_triage_model_id",
         "llm_investigation_model_id",
         "llm_response_model_id",
