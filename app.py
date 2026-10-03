@@ -63,23 +63,39 @@ def inject_css() -> None:
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-        /* Hide Streamlit Chrome — keep sidebar toggle visible */
+        /* Hide Streamlit branding only */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         .stDeployButton {display: none;}
         div[data-testid="stDecoration"] {display: none;}
+        header[data-testid="stHeader"] {visibility: hidden; height: 0 !important; min-height: 0 !important; padding: 0 !important;}
 
-        /* Hide header branding but NOT the sidebar expand/collapse button */
-        header[data-testid="stHeader"] {visibility: hidden; height: 0; padding: 0;}
-        header[data-testid="stHeader"] > * {visibility: hidden;}
-
-        /* Always show sidebar collapse/expand control */
-        [data-testid="stSidebarCollapsedControl"],
-        [data-testid="collapsedControl"],
-        button[data-testid="baseButton-headerNoPadding"] {
+        /* ══ FORCE SIDEBAR ALWAYS OPEN — never allow CSS-collapse ══ */
+        section[data-testid="stSidebar"] {
+            display: flex !important;
+            min-width: 244px !important;
+            max-width: 288px !important;
+            transform: translateX(0px) !important;
             visibility: visible !important;
             opacity: 1 !important;
+        }
+        section[data-testid="stSidebar"] > div {
             display: flex !important;
+            opacity: 1 !important;
+        }
+
+        /* Style the sidebar collapse toggle button - make it very obvious */
+        [data-testid="stSidebarCollapsedControl"] {
+            display: flex !important;
+            visibility: visible !important;
+            z-index: 9999 !important;
+            background: linear-gradient(135deg, #22d3ee, #3b82f6) !important;
+            border-radius: 0 8px 8px 0 !important;
+            padding: 10px 6px !important;
+            box-shadow: 4px 0 16px rgba(34,211,238,0.5) !important;
+        }
+        [data-testid="stSidebarCollapsedControl"] svg {
+            fill: #070b14 !important;
         }
 
         /* Core Canvas */
