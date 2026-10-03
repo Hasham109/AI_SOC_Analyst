@@ -29,7 +29,7 @@ class GroqProvider(LLMProvider):
                 {"role": "user", "content": user_prompt},
             ],
             "temperature": 0.1,
-            "max_tokens": 1600,
+            "max_tokens": 4096,
         }
         if self.settings.groq_use_json_mode:
             kwargs["response_format"] = {"type": "json_object"}

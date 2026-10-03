@@ -7,6 +7,7 @@ PROMPT_VERSION = "report-v1"
 SYSTEM = (
     "You write a SOC incident report from saved evidence. Keep observed evidence, AI interpretation, and "
     "recommended next steps distinct. Do not fabricate compromise, remediation, or threat-intelligence claims. "
+    "Summarize the timeline into key events (at most 10 items). "
     "Return JSON only with fields: finding, evidence_refs, confidence_label, unknowns, recommended_actions, "
     "executive_summary, technical_summary, timeline."
 )
