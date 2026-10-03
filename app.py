@@ -361,32 +361,55 @@ def inject_css() -> None:
         }
 
         /* ══ TOP QUICK NAV BAR BUTTONS ══ */
-        div[data-testid="stHorizontalBlock"] button[key*="top_qnav"][kind="secondary"] {
+        div[class*="st-key-top_qnav"] {
+            width: 100% !important;
+        }
+        div[class*="st-key-top_qnav"] button {
+            padding: 7px 4px !important;
+            border-radius: 8px !important;
+            min-height: 38px !important;
+            height: auto !important;
+            width: 100% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+        }
+        div[class*="st-key-top_qnav"] button p {
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+            margin: 0 !important;
+            line-height: 1.2 !important;
+        }
+        div[class*="st-key-top_qnav"] button[kind="secondary"],
+        div[class*="st-key-top_qnav"] button[data-testid="baseButton-secondary"] {
             background: rgba(13, 20, 36, 0.75) !important;
             border: 1px solid rgba(255, 255, 255, 0.08) !important;
             color: #94a3b8 !important;
-            font-size: 12px !important;
-            font-weight: 600 !important;
-            border-radius: 8px !important;
-            padding: 7px 10px !important;
             box-shadow: none !important;
             transition: all 0.18s ease !important;
         }
-        div[data-testid="stHorizontalBlock"] button[key*="top_qnav"][kind="secondary"]:hover {
-            background: rgba(34, 211, 238, 0.1) !important;
-            border-color: rgba(34, 211, 238, 0.4) !important;
+        div[class*="st-key-top_qnav"] button[kind="secondary"]:hover,
+        div[class*="st-key-top_qnav"] button[data-testid="baseButton-secondary"]:hover {
+            background: rgba(34, 211, 238, 0.12) !important;
+            border-color: rgba(34, 211, 238, 0.45) !important;
             color: #e6ecf7 !important;
             transform: translateY(-1px);
         }
-        div[data-testid="stHorizontalBlock"] button[key*="top_qnav"][kind="primary"] {
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.2) 0%, rgba(59, 130, 246, 0.3) 100%) !important;
+        div[class*="st-key-top_qnav"] button[kind="primary"],
+        div[class*="st-key-top_qnav"] button[data-testid="baseButton-primary"] {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.25) 0%, rgba(59, 130, 246, 0.35) 100%) !important;
             border: 1.5px solid #22d3ee !important;
             color: #22d3ee !important;
+            box-shadow: 0 0 16px rgba(34, 211, 238, 0.35) !important;
+        }
+        div[class*="st-key-top_qnav"] button[kind="primary"] p,
+        div[class*="st-key-top_qnav"] button[data-testid="baseButton-primary"] p {
+            color: #22d3ee !important;
             font-weight: 700 !important;
-            font-size: 12px !important;
-            border-radius: 8px !important;
-            padding: 7px 10px !important;
-            box-shadow: 0 0 16px rgba(34, 211, 238, 0.3) !important;
         }
 
         /* ══ FULL CANVAS LAYOUT OPTIMIZATION ══ */
