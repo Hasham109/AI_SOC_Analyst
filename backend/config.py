@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     llm_triage_provider: str = "groq"
     llm_triage_model_id: str = "openai/gpt-oss-20b"
     llm_investigation_provider: str = "groq"
-    llm_investigation_model_id: str = "llama-3.3-70b-versatile"
+    llm_investigation_model_id: str = "openai/gpt-oss-120b"
     llm_response_provider: str = "groq"
     llm_response_model_id: str = "openai/gpt-oss-20b"
     llm_report_provider: str = "groq"

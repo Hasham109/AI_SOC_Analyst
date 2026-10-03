@@ -36,7 +36,7 @@ def api_post(path: str, body: Dict[str, Any] | None = None):
 
 
 st.title("🛡️ AI-Powered SOC Analyst Platform")
-st.caption("Evidence-first Wazuh monitoring. AI reasoning powered by Groq Llama 3 models.")
+st.caption("Evidence-first Wazuh monitoring. AI reasoning powered by Groq Openai gpt os models.")
 
 
 @st.fragment(run_every=120)
