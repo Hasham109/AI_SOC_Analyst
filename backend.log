@@ -1,0 +1,285 @@
+INFO:     Started server process [20204]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:49644 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49656 - "GET /api/dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49657 - "GET /api/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49658 - "GET /api/incidents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49661 - "GET /api/dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49662 - "POST /api/ingestion/run HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connection.py", line 239, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py", line 494, in _make_request
+    raise new_e
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py", line 470, in _make_request
+    self._validate_conn(conn)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py", line 1125, in _validate_conn
+    conn.connect()
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connection.py", line 827, in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connection.py", line 254, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='13.60.94.139', port=9200): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\requests\adapters.py", line 696, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\util\retry.py", line 555, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='13.60.94.139', port=9200): Max retries exceeded with url: /wazuh-alerts-4.x-*/_search (Caused by NewConnectionError("HTTPSConnection(host='13.60.94.139', port=9200): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\uvicorn\protocols\http\httptools_impl.py", line 422, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\uvicorn\middleware\proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\applications.py", line 1215, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\telemetry\_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\routing.py", line 676, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 2786, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 1310, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\routing.py", line 282, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 165, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 151, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 727, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 362, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2706, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\telemetry\_api.py", line 240, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\backend\main.py", line 63, in ingestion_run
+    return run_ingestion()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\backend\ingest.py", line 23, in run_ingestion
+    hits = client.fetch_alerts(since, settings.fetch_limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\backend\wazuh\base.py", line 117, in fetch_alerts
+    response = self.session.post(
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\requests\sessions.py", line 712, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\requests\sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\requests\sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\requests\adapters.py", line 729, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='13.60.94.139', port=9200): Max retries exceeded with url: /wazuh-alerts-4.x-*/_search (Caused by NewConnectionError("HTTPSConnection(host='13.60.94.139', port=9200): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+INFO:     127.0.0.1:49671 - "GET /api/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49672 - "GET /api/incidents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49712 - "GET /api/source/status HTTP/1.1" 401 Unauthorized
+C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py:1129: InsecureRequestWarning: Unverified HTTPS request is being made to host '13.60.94.139'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+INFO:     127.0.0.1:49720 - "GET /api/source/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50064 - "GET /api/dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50065 - "GET /api/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50066 - "GET /api/incidents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50070 - "GET /api/dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50071 - "POST /api/ingestion/run HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connection.py", line 239, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py", line 494, in _make_request
+    raise new_e
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py", line 470, in _make_request
+    self._validate_conn(conn)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py", line 1125, in _validate_conn
+    conn.connect()
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connection.py", line 827, in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connection.py", line 254, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='13.60.94.139', port=9200): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\requests\adapters.py", line 696, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\urllib3\util\retry.py", line 555, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='13.60.94.139', port=9200): Max retries exceeded with url: /wazuh-alerts-4.x-*/_search (Caused by NewConnectionError("HTTPSConnection(host='13.60.94.139', port=9200): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\uvicorn\protocols\http\httptools_impl.py", line 422, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\uvicorn\middleware\proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\applications.py", line 1215, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\telemetry\_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\routing.py", line 676, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 2786, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 1310, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\routing.py", line 282, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 165, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 151, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 727, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\routing.py", line 362, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2706, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\fastapi\telemetry\_api.py", line 240, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\backend\main.py", line 63, in ingestion_run
+    return run_ingestion()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\backend\ingest.py", line 23, in run_ingestion
+    hits = client.fetch_alerts(since, settings.fetch_limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\backend\wazuh\base.py", line 117, in fetch_alerts
+    response = self.session.post(
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\requests\sessions.py", line 712, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\requests\sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\requests\sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Study\Desktop\Generative AI cohort 11 HEC\application\.venv\Lib\site-packages\requests\adapters.py", line 729, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='13.60.94.139', port=9200): Max retries exceeded with url: /wazuh-alerts-4.x-*/_search (Caused by NewConnectionError("HTTPSConnection(host='13.60.94.139', port=9200): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+INFO:     127.0.0.1:50073 - "GET /api/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50074 - "GET /api/incidents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50653 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50654 - "GET /api/dashboard HTTP/1.1" 404 Not Found

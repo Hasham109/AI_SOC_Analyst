@@ -1,0 +1,19 @@
+{
+  "_index": "wazuh-alerts-4.x-2026.10.01",
+  "_id": "demo-alert-001",
+  "_source": {
+    "timestamp": "2026-10-01T18:00:00Z",
+    "agent": {"id": "001", "name": "lab-windows", "ip": "10.144.85.10"},
+    "rule": {
+      "id": "5763",
+      "level": 10,
+      "description": "sshd: brute force attempt trying multiple accounts",
+      "groups": ["demo", "authentication", "sshd"],
+      "mitre": {"id": ["T1110"]}
+    },
+    "data": {"srcip": "192.168.1.100", "srcuser": "root"},
+    "decoder": {"name": "sshd"},
+    "location": "/var/log/auth.log",
+    "full_log": "sshd: brute force authentication failure from 192.168.1.100"
+  }
+}
