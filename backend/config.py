@@ -41,15 +41,15 @@ class Settings(BaseSettings):
 
     # Groq Model Defaults (Updated with live active models)
     llm_triage_provider: str = "groq"
-    llm_triage_model_id: str = "llama-3.1-8b-instant"
+    llm_triage_model_id: str = "openai/gpt-oss-20b"
     llm_investigation_provider: str = "groq"
     llm_investigation_model_id: str = "llama-3.3-70b-versatile"
     llm_response_provider: str = "groq"
-    llm_response_model_id: str = "llama-3.1-8b-instant"
+    llm_response_model_id: str = "openai/gpt-oss-20b"
     llm_report_provider: str = "groq"
-    llm_report_model_id: str = "llama-3.1-8b-instant"
+    llm_report_model_id: str = "openai/gpt-oss-20b"
     llm_manager_provider: str = "groq"
-    llm_manager_model_id: str = "llama-3.1-8b-instant"
+    llm_manager_model_id: str = "openai/gpt-oss-20b"
 
     groq_api_key: Optional[SecretStr] = None
     groq_use_json_mode: bool = True
