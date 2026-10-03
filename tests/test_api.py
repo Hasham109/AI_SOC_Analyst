@@ -5,4 +5,5 @@ def test_api_contract_exists():
     assert "/api/alerts" in paths
     assert "/api/incidents" in paths
     assert "/api/ingestion/run" in paths
+    assert "/api/system/connections" in paths
 

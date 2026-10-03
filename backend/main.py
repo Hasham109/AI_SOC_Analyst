@@ -12,6 +12,7 @@ from backend.api.alerts import router as alerts_router
 from backend.api.health import router as health_router
 from backend.api.incidents import router as incidents_router
 from backend.api.investigations import router as dashboard_router
+from backend.api.system import router as system_router
 from backend.config import get_settings
 from backend.db.models import Base
 from backend.db.session import engine
@@ -106,6 +107,7 @@ app.include_router(health_router, dependencies=[Depends(require_token)])
 app.include_router(alerts_router, dependencies=[Depends(require_token)])
 app.include_router(incidents_router, dependencies=[Depends(require_token)])
 app.include_router(dashboard_router, dependencies=[Depends(require_token)])
+app.include_router(system_router, dependencies=[Depends(require_token)])
 
 
 @app.post("/api/ingestion/run", dependencies=[Depends(require_token)])
