@@ -84,10 +84,9 @@ def inject_css() -> None:
     st.markdown(
         """
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
         /* ══ STREAMLIT HEADER & CHROME CONTROLS ══ */
-        /* Keep header container transparent and interactive so sidebar toggle works */
         header[data-testid="stHeader"] {
             background: transparent !important;
             color: #e6ecf7 !important;
@@ -97,7 +96,7 @@ def inject_css() -> None:
             display: flex !important;
         }
 
-        /* Hide unwanted Streamlit branding elements only */
+        /* Hide unwanted Streamlit chrome */
         #MainMenu { visibility: hidden !important; }
         footer { visibility: hidden !important; }
         .stDeployButton { display: none !important; }
@@ -105,7 +104,7 @@ def inject_css() -> None:
         div[data-testid="stStatusWidget"] { display: none !important; }
         div[data-testid="stToolbar"] { visibility: hidden !important; }
 
-        /* ══ SIDEBAR TOGGLE BUTTON (when collapsed) ══ */
+        /* ══ SIDEBAR COLLAPSED REOPEN BUTTON ══ */
         [data-testid="stSidebarCollapsedControl"],
         div[data-testid="stSidebarCollapsedControl"],
         button[data-testid="stSidebarCollapsedControl"],
@@ -114,23 +113,24 @@ def inject_css() -> None:
             visibility: visible !important;
             opacity: 1 !important;
             position: fixed !important;
-            top: 12px !important;
-            left: 12px !important;
+            top: 14px !important;
+            left: 14px !important;
             z-index: 1000000 !important;
             background: #0d1422 !important;
             border: 1.5px solid #22d3ee !important;
-            border-radius: 8px !important;
-            padding: 7px 12px !important;
-            box-shadow: 0 0 16px rgba(34, 211, 238, 0.45) !important;
+            border-radius: 10px !important;
+            padding: 8px 12px !important;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.45) !important;
             cursor: pointer !important;
             color: #22d3ee !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
 
         [data-testid="stSidebarCollapsedControl"]:hover {
             background: #13213a !important;
             border-color: #67e8f9 !important;
-            box-shadow: 0 0 24px rgba(34, 211, 238, 0.75) !important;
-            transform: scale(1.05);
+            box-shadow: 0 0 28px rgba(34, 211, 238, 0.75) !important;
+            transform: scale(1.06);
         }
 
         [data-testid="stSidebarCollapsedControl"] svg,
@@ -139,39 +139,83 @@ def inject_css() -> None:
             stroke: #22d3ee !important;
         }
 
-        /* Sidebar collapse toggle button (inside sidebar when open) */
         [data-testid="stSidebarCollapseButton"] button {
             color: #7d8aa5 !important;
             border-radius: 6px !important;
+            transition: all 0.2s ease;
         }
         [data-testid="stSidebarCollapseButton"] button:hover {
             color: #22d3ee !important;
             background: rgba(34, 211, 238, 0.1) !important;
         }
 
-        /* Core Canvas */
+        /* ══ CORE CANVAS & TYPOGRAPHY ══ */
         .stApp {
-            background: radial-gradient(circle at 90% 10%, #13254a 0%, transparent 45%),
-                        radial-gradient(circle at 10% 90%, #1a0f33 0%, transparent 45%),
-                        #070b14;
+            background:
+                radial-gradient(circle at 85% 5%, rgba(34, 211, 238, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.07) 0%, transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(14, 165, 233, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, #070b14 0%, #05070f 100%);
             color: #e6ecf7;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Mono styling */
         .mono {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-variant-numeric: tabular-nums;
         }
 
-        /* Glassmorphism Cards */
+        /* ══ CYBER SCROLLBAR ══ */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070b14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1c2740;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #22d3ee;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+
+        /* ══ LIVE RADAR BEACON KEYFRAME ══ */
+        @keyframes live-pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .live-beacon {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            animation: live-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+
+        /* ══ GLASSMORPHISM CARDS ══ */
         .soc-card {
-            background: linear-gradient(180deg, rgba(17,26,44,0.92) 0%, rgba(13,20,34,0.92) 100%);
-            border: 1px solid #1c2740;
+            background: linear-gradient(180deg, rgba(16, 24, 42, 0.88) 0%, rgba(10, 16, 30, 0.92) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
-            padding: 18px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-            margin-bottom: 16px;
+            padding: 20px;
+            box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            margin-bottom: 18px;
             position: relative;
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .soc-card:hover {
+            border-color: rgba(34, 211, 238, 0.28);
+            box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.65), 0 0 24px rgba(34, 211, 238, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .soc-card-border-glow {
@@ -180,125 +224,177 @@ def inject_css() -> None:
                         linear-gradient(135deg, rgba(34,211,238,0.5) 0%, rgba(139,92,246,0.5) 100%) border-box;
         }
 
-        /* KPI Strips */
+        /* ══ KPI CARDS & STRIPS ══ */
+        .kpi-card {
+            background: linear-gradient(180deg, rgba(17, 26, 46, 0.88) 0%, rgba(11, 18, 33, 0.95) 100%);
+            padding: 18px 20px;
+            overflow: hidden;
+        }
+        .kpi-card:hover {
+            transform: translateY(-2px);
+        }
         .kpi-strip {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
+            height: 3px;
             border-radius: 16px 16px 0 0;
         }
-        .strip-cyan { background: #22d3ee; }
-        .strip-orange { background: #f97316; }
-        .strip-red { background: #f43f5e; }
-        .strip-violet { background: #8b5cf6; }
+        .strip-cyan { background: linear-gradient(90deg, #22d3ee, #3b82f6); box-shadow: 0 0 12px rgba(34, 211, 238, 0.5); }
+        .strip-orange { background: linear-gradient(90deg, #f97316, #fb923c); box-shadow: 0 0 12px rgba(249, 115, 22, 0.5); }
+        .strip-red { background: linear-gradient(90deg, #f43f5e, #fb7185); box-shadow: 0 0 12px rgba(244, 63, 94, 0.5); }
+        .strip-violet { background: linear-gradient(90deg, #8b5cf6, #c084fc); box-shadow: 0 0 12px rgba(139, 92, 246, 0.5); }
 
-        /* Severity Pills */
+        /* ══ SEVERITY PILLS ══ */
         .pill {
-            display: inline-block;
-            padding: 2px 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 9px;
             border-radius: 9999px;
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            line-height: 1.4;
+            letter-spacing: 0.06em;
+            line-height: 1.3;
         }
         .pill-critical {
-            background: rgba(244, 63, 94, 0.15);
-            color: #f43f5e;
-            border: 1px solid rgba(244, 63, 94, 0.4);
+            background: rgba(244, 63, 94, 0.16);
+            color: #fb7185;
+            border: 1px solid rgba(244, 63, 94, 0.45);
+            box-shadow: 0 0 10px rgba(244, 63, 94, 0.2);
         }
         .pill-high {
-            background: rgba(249, 115, 22, 0.15);
-            color: #f97316;
-            border: 1px solid rgba(249, 115, 22, 0.4);
+            background: rgba(249, 115, 22, 0.16);
+            color: #fb923c;
+            border: 1px solid rgba(249, 115, 22, 0.45);
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.2);
         }
         .pill-medium {
-            background: rgba(234, 179, 8, 0.15);
-            color: #eab308;
-            border: 1px solid rgba(234, 179, 8, 0.4);
+            background: rgba(234, 179, 8, 0.16);
+            color: #facc15;
+            border: 1px solid rgba(234, 179, 8, 0.45);
         }
         .pill-low {
-            background: rgba(34, 197, 94, 0.15);
-            color: #22c55e;
-            border: 1px solid rgba(34, 197, 94, 0.4);
+            background: rgba(34, 197, 94, 0.16);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.45);
         }
         .pill-unknown {
-            background: rgba(107, 114, 128, 0.15);
+            background: rgba(107, 114, 128, 0.16);
             color: #9ca3af;
-            border: 1px solid rgba(107, 114, 128, 0.4);
+            border: 1px solid rgba(107, 114, 128, 0.45);
         }
 
-        /* MITRE Chips */
+        /* ══ MITRE ATT&CK CHIPS ══ */
         .mitre-chip {
             display: inline-block;
-            background: rgba(139, 92, 246, 0.15);
+            background: rgba(139, 92, 246, 0.12);
             color: #c4b5fd;
             border: 1px solid rgba(139, 92, 246, 0.35);
             font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            padding: 2px 6px;
-            border-radius: 4px;
+            font-size: 10.5px;
+            padding: 2px 7px;
+            border-radius: 5px;
             margin: 2px;
+            transition: all 0.15s ease;
+        }
+        .mitre-chip:hover {
+            background: rgba(139, 92, 246, 0.22);
+            border-color: rgba(139, 92, 246, 0.6);
+            transform: translateY(-1px);
         }
 
-        /* Connection status dots */
+        /* ══ STATUS DOTS ══ */
         .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             display: inline-block;
             margin-right: 6px;
         }
-        .dot-green { background: #22c55e; box-shadow: 0 0 8px rgba(34, 197, 94, 0.6); }
-        .dot-amber { background: #eab308; box-shadow: 0 0 8px rgba(234, 179, 8, 0.6); }
-        .dot-red { background: #f43f5e; box-shadow: 0 0 8px rgba(244, 63, 94, 0.6); }
+        .dot-green { background: #22c55e; box-shadow: 0 0 10px rgba(34, 197, 94, 0.7); }
+        .dot-amber { background: #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.7); }
+        .dot-red { background: #f43f5e; box-shadow: 0 0 10px rgba(244, 63, 94, 0.7); }
         .dot-grey { background: #6b7280; box-shadow: 0 0 6px rgba(107, 114, 128, 0.4); }
 
-        /* Primary Button */
+        /* ══ BUTTONS & CONTROLS ══ */
         div.stButton > button {
             background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
             color: #070b14 !important;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.02em;
             border: none;
-            border-radius: 8px;
-            padding: 8px 16px;
-            box-shadow: 0 4px 18px rgba(34, 211, 238, 0.3);
-            transition: all 0.2s ease;
+            border-radius: 10px;
+            padding: 9px 18px;
+            box-shadow: 0 4px 18px rgba(34, 211, 238, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer !important;
             position: relative;
             z-index: 2;
             pointer-events: auto !important;
         }
         div.stButton > button:hover {
-            box-shadow: 0 6px 24px rgba(34, 211, 238, 0.5);
-            transform: translateY(-1px);
+            box-shadow: 0 6px 26px rgba(34, 211, 238, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
             color: #000 !important;
         }
         div.stButton > button:active {
             transform: translateY(0px);
             box-shadow: 0 2px 8px rgba(34, 211, 238, 0.3);
         }
+
         div.stDownloadButton > button {
-            background: rgba(139, 92, 246, 0.15) !important;
+            background: rgba(139, 92, 246, 0.16) !important;
             color: #c4b5fd !important;
-            border: 1px solid rgba(139, 92, 246, 0.4) !important;
+            border: 1px solid rgba(139, 92, 246, 0.45) !important;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer !important;
             transition: all 0.2s ease;
         }
         div.stDownloadButton > button:hover {
             background: rgba(139, 92, 246, 0.28) !important;
-            box-shadow: 0 4px 18px rgba(139, 92, 246, 0.35);
+            border-color: rgba(139, 92, 246, 0.7) !important;
+            box-shadow: 0 4px 18px rgba(139, 92, 246, 0.4);
+            transform: translateY(-1px);
         }
 
-        /* Sidebar Styling */
+        /* ══ TOP QUICK NAV BAR BUTTONS ══ */
+        div[data-testid="stHorizontalBlock"] button[key*="top_qnav"][kind="secondary"] {
+            background: rgba(13, 20, 36, 0.75) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #94a3b8 !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            border-radius: 8px !important;
+            padding: 7px 10px !important;
+            box-shadow: none !important;
+            transition: all 0.18s ease !important;
+        }
+        div[data-testid="stHorizontalBlock"] button[key*="top_qnav"][kind="secondary"]:hover {
+            background: rgba(34, 211, 238, 0.1) !important;
+            border-color: rgba(34, 211, 238, 0.4) !important;
+            color: #e6ecf7 !important;
+            transform: translateY(-1px);
+        }
+        div[data-testid="stHorizontalBlock"] button[key*="top_qnav"][kind="primary"] {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.2) 0%, rgba(59, 130, 246, 0.3) 100%) !important;
+            border: 1.5px solid #22d3ee !important;
+            color: #22d3ee !important;
+            font-weight: 700 !important;
+            font-size: 12px !important;
+            border-radius: 8px !important;
+            padding: 7px 10px !important;
+            box-shadow: 0 0 16px rgba(34, 211, 238, 0.3) !important;
+        }
+
+        /* ══ SIDEBAR STYLING ══ */
         section[data-testid="stSidebar"] {
-            background-color: #0a0f1d !important;
-            border-right: 1px solid #1c2740;
+            background-color: #080d19 !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.07);
         }
         section[data-testid="stSidebar"] .stRadio > div {
             gap: 5px;
@@ -306,11 +402,11 @@ def inject_css() -> None:
         section[data-testid="stSidebar"] .stRadio label {
             background: transparent;
             padding: 9px 12px;
-            border-radius: 8px;
+            border-radius: 9px;
             border-left: 3px solid transparent;
             color: #94a3b8;
             font-weight: 500;
-            transition: all 0.15s ease;
+            transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer !important;
             display: flex !important;
             align-items: center;
@@ -319,17 +415,15 @@ def inject_css() -> None:
             background: rgba(34, 211, 238, 0.08);
             color: #e6ecf7;
             border-left-color: rgba(34, 211, 238, 0.4);
-            transform: translateX(2px);
+            transform: translateX(3px);
         }
-        /* Active Selected Radio Item */
         section[data-testid="stSidebar"] .stRadio label:has(input:checked) {
-            background: rgba(34, 211, 238, 0.12) !important;
+            background: linear-gradient(90deg, rgba(34, 211, 238, 0.14) 0%, rgba(34, 211, 238, 0.03) 100%) !important;
             border-left: 3px solid #22d3ee !important;
             color: #22d3ee !important;
             font-weight: 600 !important;
-            box-shadow: 0 0 14px rgba(34, 211, 238, 0.15) !important;
+            box-shadow: inset 0 0 16px rgba(34, 211, 238, 0.06);
         }
-        /* Hide radio circle so it looks like a clean modern button menu */
         section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label > div:first-child {
             display: none !important;
         }
@@ -339,46 +433,55 @@ def inject_css() -> None:
             font-weight: 500;
         }
 
-        /* Input Controls */
+        /* ══ FORM CONTROLS & INPUTS ══ */
         div[data-baseweb="select"] > div,
         div[data-baseweb="input"] > div,
         div[data-baseweb="base-input"] {
-            background-color: #0d1422 !important;
+            background-color: #0c1220 !important;
             border: 1px solid #1c2740 !important;
             color: #e6ecf7 !important;
-            border-radius: 8px !important;
+            border-radius: 9px !important;
+            transition: all 0.2s ease;
+        }
+        div[data-baseweb="select"] > div:focus-within,
+        div[data-baseweb="input"] > div:focus-within {
+            border-color: #22d3ee !important;
+            box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.25) !important;
         }
 
-        /* Custom Table Styling */
+        /* ══ CUSTOM DATA TABLES ══ */
         .soc-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 12.5px;
         }
         .soc-table th {
             text-align: left;
-            padding: 10px 12px;
+            padding: 11px 14px;
             color: #7d8aa5;
             font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.05em;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
             border-bottom: 1px solid #1c2740;
+            background: rgba(13, 20, 36, 0.7);
         }
         .soc-table td {
-            padding: 10px 12px;
+            padding: 12px 14px;
             border-bottom: 1px solid rgba(28, 39, 64, 0.6);
             color: #e6ecf7;
             vertical-align: middle;
+            transition: background-color 0.15s ease;
         }
         .soc-table tr:hover td {
-            background-color: rgba(255, 255, 255, 0.02);
+            background-color: rgba(34, 211, 238, 0.04);
         }
 
-        /* Timeline Items */
+        /* ══ TIMELINE COMPONENT ══ */
         .timeline-item {
             position: relative;
             padding-left: 28px;
-            padding-bottom: 18px;
+            padding-bottom: 20px;
             border-left: 2px solid #1c2740;
         }
         .timeline-item:last-child {
@@ -393,27 +496,35 @@ def inject_css() -> None:
             height: 12px;
             border-radius: 50%;
             border: 2px solid #070b14;
+            box-shadow: 0 0 8px currentColor;
         }
 
-        /* Connection Strip Card */
+        /* ══ TELEMETRY CONNECTION CARDS ══ */
         .conn-card {
-            background: rgba(13, 20, 34, 0.85);
-            border: 1px solid #1c2740;
-            border-radius: 12px;
-            padding: 12px 14px;
+            background: rgba(12, 18, 32, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
+            padding: 14px 16px;
             height: 100%;
+            backdrop-filter: blur(12px);
+            transition: all 0.2s ease;
+        }
+        .conn-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
         .conn-card-down {
-            border-left: 3px solid #f43f5e !important;
+            border-left: 3.5px solid #f43f5e !important;
         }
         .conn-card-ok {
-            border-left: 3px solid #22c55e !important;
+            border-left: 3.5px solid #22c55e !important;
         }
         .conn-card-degraded {
-            border-left: 3px solid #eab308 !important;
+            border-left: 3.5px solid #eab308 !important;
         }
         </style>
-        """,
+        """
+,
         unsafe_allow_html=True,
     )
 
@@ -509,22 +620,33 @@ def render_topbar(current_page: str = PAGE_SOC_OVERVIEW) -> None:
     now_utc = datetime.now(timezone.utc).strftime("%H:%M:%S")
     st.markdown(
         f"""
-        <div style="display:flex; justify-content:space-between; align-items:flex-end; padding-bottom:12px; border-bottom:1px solid #1c2740; margin-bottom:12px;">
-            <div>
-                <h2 style="margin:0; font-weight:700; color:#e6ecf7; letter-spacing:-0.02em; font-size:24px;">
-                    🛡️ Security Operations Center
-                </h2>
-                <div style="color:#7d8aa5; font-size:13px; margin-top:3px;">
-                    Evidence-first Wazuh monitoring · AI reasoning powered by Groq OpenAI gpt-oss models
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; background:linear-gradient(180deg, rgba(16,24,42,0.85) 0%, rgba(10,16,30,0.92) 100%); border:1px solid rgba(255,255,255,0.08); border-radius:16px; margin-bottom:14px; backdrop-filter:blur(20px); box-shadow:0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);">
+            <div style="display:flex; align-items:center; gap:16px;">
+                <div style="width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg, rgba(34,211,238,0.2) 0%, rgba(139,92,246,0.3) 100%); border:1.5px solid rgba(34,211,238,0.45); display:flex; align-items:center; justify-content:center; box-shadow:0 0 24px rgba(34,211,238,0.3);">
+                    <span style="font-size:22px;">🛡️</span>
+                </div>
+                <div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <h1 style="margin:0; font-weight:800; color:#e6ecf7; letter-spacing:-0.02em; font-size:20px; line-height:1.2;">
+                            AI-POWERED SOC ANALYST
+                        </h1>
+                        <span style="background:rgba(34,211,238,0.12); color:#22d3ee; border:1px solid rgba(34,211,238,0.35); padding:2px 8px; border-radius:6px; font-size:10px; font-weight:700; letter-spacing:0.08em;">
+                            TIER-3 AUTONOMOUS
+                        </span>
+                    </div>
+                    <div style="color:#7d8aa5; font-size:12px; margin-top:2px;">
+                        Wazuh Threat Telemetry · Correlated AI Reasoning via Groq Models · Automated Response
+                    </div>
                 </div>
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
-                <span style="background:rgba(34,197,94,0.12); color:#22c55e; border:1px solid rgba(34,197,94,0.3); padding:4px 10px; border-radius:9999px; font-size:11px; font-weight:700; letter-spacing:0.05em;">
-                    ● LIVE
-                </span>
-                <span class="mono" style="color:#7d8aa5; font-size:12px;">
-                    Last refreshed {now_utc} UTC
-                </span>
+                <div style="display:flex; align-items:center; gap:8px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.35); padding:5px 12px; border-radius:9999px;">
+                    <span class="live-beacon"></span>
+                    <span style="color:#4ade80; font-size:11px; font-weight:700; letter-spacing:0.06em;">LIVE SURVEILLANCE</span>
+                </div>
+                <div class="mono" style="background:rgba(12,18,32,0.85); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:6px 12px; font-size:11.5px; color:#94a3b8; font-weight:600;">
+                    ⏱️ {now_utc} UTC
+                </div>
             </div>
         </div>
         """,
@@ -565,9 +687,14 @@ def render_system_connections_strip() -> None:
     header_col, btn_col = st.columns([6, 1])
     with header_col:
         st.markdown(
-            '<div style="font-size:12px; font-weight:600; color:#7d8aa5; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:6px;">'
-            'System Connections & Telemetry'
-            '</div>',
+            """
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <div style="width:3px; height:14px; background:#22d3ee; border-radius:2px; box-shadow:0 0 8px #22d3ee;"></div>
+                <div style="font-size:11.5px; font-weight:700; color:#7d8aa5; letter-spacing:0.08em; text-transform:uppercase;">
+                    System Connections & Telemetry Mesh
+                </div>
+            </div>
+            """,
             unsafe_allow_html=True,
         )
     with btn_col:
@@ -594,10 +721,12 @@ def render_system_connections_strip() -> None:
                 f"""
                 <div class="conn-card conn-card-down">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:12px; font-weight:600; color:#7d8aa5;">BACKEND API</span>
-                        <span><span class="status-dot dot-red"></span><span style="font-size:12px; color:#f43f5e; font-weight:600;">Disconnected</span></span>
+                        <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
+                            <span>🌐</span> BACKEND API
+                        </span>
+                        <span><span class="status-dot dot-red"></span><span style="font-size:11.5px; color:#f43f5e; font-weight:700;">Offline</span></span>
                     </div>
-                    <div class="mono" style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:4px;">{html.escape(host_str)}</div>
+                    <div class="mono" style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">{html.escape(host_str)}</div>
                     <div style="font-size:11px; color:#f43f5e; margin-top:4px;">Backend unreachable at host</div>
                 </div>
                 """,
@@ -613,10 +742,12 @@ def render_system_connections_strip() -> None:
                 f"""
                 <div class="conn-card {border_cls}">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:12px; font-weight:600; color:#7d8aa5;">BACKEND API</span>
-                        <span><span class="status-dot {dot_cls}"></span><span style="font-size:12px; font-weight:600; color:#e6ecf7;">{status_text}</span></span>
+                        <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
+                            <span>🌐</span> BACKEND API
+                        </span>
+                        <span><span class="status-dot {dot_cls}"></span><span style="font-size:11.5px; font-weight:700; color:#4ade80;">{status_text}</span></span>
                     </div>
-                    <div class="mono" style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:4px;">{html.escape(host_str)}</div>
+                    <div class="mono" style="font-size:13px; font-weight:600; color:#22d3ee; margin-top:8px;">{html.escape(host_str)}</div>
                     <div style="font-size:11px; color:#7d8aa5; margin-top:4px;">FastAPI v{html.escape(str(bk.get('version', '1.0')))} · Auth active</div>
                 </div>
                 """,
@@ -630,10 +761,12 @@ def render_system_connections_strip() -> None:
                 """
                 <div class="conn-card conn-card-down">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:12px; font-weight:600; color:#7d8aa5;">DATABASE</span>
-                        <span><span class="status-dot dot-red"></span><span style="font-size:12px; color:#f43f5e; font-weight:600;">Disconnected</span></span>
+                        <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
+                            <span>🗄️</span> DATABASE
+                        </span>
+                        <span><span class="status-dot dot-red"></span><span style="font-size:11.5px; color:#f43f5e; font-weight:700;">Offline</span></span>
                     </div>
-                    <div style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:4px;">Unknown</div>
+                    <div style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">Unknown</div>
                     <div style="font-size:11px; color:#f43f5e; margin-top:4px;">Backend unreachable</div>
                 </div>
                 """,
@@ -651,10 +784,12 @@ def render_system_connections_strip() -> None:
                 f"""
                 <div class="conn-card {border_cls}">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:12px; font-weight:600; color:#7d8aa5;">DATABASE</span>
-                        <span><span class="status-dot {dot_cls}"></span><span style="font-size:12px; font-weight:600; color:#e6ecf7;">{'Connected' if st_ok else 'Down'}</span></span>
+                        <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
+                            <span>🗄️</span> DATABASE
+                        </span>
+                        <span><span class="status-dot {dot_cls}"></span><span style="font-size:11.5px; font-weight:700; color:#4ade80;">{'Connected' if st_ok else 'Down'}</span></span>
                     </div>
-                    <div class="mono" style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:4px;">{engine_str} · {lat_str}</div>
+                    <div class="mono" style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">{engine_str} · {lat_str}</div>
                     <div style="font-size:11px; color:#7d8aa5; margin-top:4px;">{cnt_str}</div>
                 </div>
                 """,
@@ -668,10 +803,12 @@ def render_system_connections_strip() -> None:
                 """
                 <div class="conn-card conn-card-down">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:12px; font-weight:600; color:#7d8aa5;">WAZUH SIEM</span>
-                        <span><span class="status-dot dot-red"></span><span style="font-size:12px; color:#f43f5e; font-weight:600;">Disconnected</span></span>
+                        <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
+                            <span>🛡️</span> WAZUH SIEM
+                        </span>
+                        <span><span class="status-dot dot-red"></span><span style="font-size:11.5px; color:#f43f5e; font-weight:700;">Offline</span></span>
                     </div>
-                    <div style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:4px;">Down</div>
+                    <div style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">Down</div>
                     <div style="font-size:11px; color:#f43f5e; margin-top:4px;">Check Wazuh credentials</div>
                 </div>
                 """,
@@ -684,14 +821,17 @@ def render_system_connections_strip() -> None:
                 dot_cls = "dot-green"
                 border_cls = "conn-card-ok"
                 st_label = "Connected"
+                st_color = "#4ade80"
             elif wz_st == "degraded":
                 dot_cls = "dot-amber"
                 border_cls = "conn-card-degraded"
                 st_label = "Degraded"
+                st_color = "#facc15"
             else:
                 dot_cls = "dot-red"
                 border_cls = "conn-card-down"
                 st_label = "Disconnected"
+                st_color = "#f43f5e"
 
             source_str = wz.get("source", "aws").upper()
             mgr_ver = wz.get("manager", {}).get("version", "v4.x")
@@ -700,19 +840,20 @@ def render_system_connections_strip() -> None:
             if agents:
                 ag_act = agents.get("active", 0)
                 ag_tot = agents.get("total", 0)
-                ag_disc = agents.get("disconnected", 0)
-                ag_str = f"{ag_act}/{ag_tot} active"
+                ag_str = f"{ag_act}/{ag_tot} endpoints active"
             else:
-                ag_str = "Agents summary unavailable"
+                ag_str = "Agents summary ready"
 
             st.markdown(
                 f"""
                 <div class="conn-card {border_cls}">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:12px; font-weight:600; color:#7d8aa5;">WAZUH SIEM ({source_str})</span>
-                        <span><span class="status-dot {dot_cls}"></span><span style="font-size:12px; font-weight:600; color:#e6ecf7;">{st_label}</span></span>
+                        <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
+                            <span>🛡️</span> WAZUH ({source_str})
+                        </span>
+                        <span><span class="status-dot {dot_cls}"></span><span style="font-size:11.5px; font-weight:700; color:{st_color};">{st_label}</span></span>
                     </div>
-                    <div class="mono" style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:4px;">Mgr {html.escape(mgr_ver)} · Idx {html.escape(idx_st)}</div>
+                    <div class="mono" style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">Mgr {html.escape(mgr_ver)} · Idx {html.escape(idx_st)}</div>
                     <div style="font-size:11px; color:#7d8aa5; margin-top:4px;">{html.escape(ag_str)}</div>
                 </div>
                 """,
@@ -726,10 +867,12 @@ def render_system_connections_strip() -> None:
                 """
                 <div class="conn-card conn-card-down">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:12px; font-weight:600; color:#7d8aa5;">GROQ AI ENGINE</span>
-                        <span><span class="status-dot dot-red"></span><span style="font-size:12px; color:#f43f5e; font-weight:600;">Disconnected</span></span>
+                        <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
+                            <span>⚡</span> GROQ AI ENGINE
+                        </span>
+                        <span><span class="status-dot dot-red"></span><span style="font-size:11.5px; color:#f43f5e; font-weight:700;">Offline</span></span>
                     </div>
-                    <div style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:4px;">Unreachable</div>
+                    <div style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">Unreachable</div>
                     <div style="font-size:11px; color:#f43f5e; margin-top:4px;">Check backend connection</div>
                 </div>
                 """,
@@ -742,20 +885,23 @@ def render_system_connections_strip() -> None:
                 dot_cls = "dot-green"
                 border_cls = "conn-card-ok"
                 st_label = "Connected"
+                st_color = "#4ade80"
             elif gq_st == "not_configured":
                 dot_cls = "dot-grey"
                 border_cls = "conn-card-down"
                 st_label = "Not Configured"
+                st_color = "#94a3b8"
             else:
                 dot_cls = "dot-red"
                 border_cls = "conn-card-down"
                 st_label = "Disconnected"
+                st_color = "#f43f5e"
 
             lat_str = f"{gq.get('latency_ms', 0)} ms"
             models_list = gq.get("models", [])
             chips_html = "".join(
-                [f'<span class="mono" style="font-size:10px; background:rgba(34,211,238,0.1); color:#22d3ee; padding:1px 5px; border-radius:4px; margin-right:3px;">{html.escape(m.split("/")[-1])}</span>' for m in models_list]
-            ) or '<span style="color:#7d8aa5; font-size:11px;">No models</span>'
+                [f'<span class="mono" style="font-size:10px; background:rgba(34,211,238,0.1); color:#22d3ee; border:1px solid rgba(34,211,238,0.3); padding:1px 6px; border-radius:5px; margin-right:3px;">{html.escape(m.split("/")[-1])}</span>' for m in models_list]
+            ) or '<span style="color:#7d8aa5; font-size:11px;">No models configured</span>'
 
             err_hint = ""
             if gq_st == "down":
@@ -765,10 +911,12 @@ def render_system_connections_strip() -> None:
                 f"""
                 <div class="conn-card {border_cls}">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:12px; font-weight:600; color:#7d8aa5;">GROQ AI ENGINE</span>
-                        <span><span class="status-dot {dot_cls}"></span><span style="font-size:12px; font-weight:600; color:#e6ecf7;">{st_label}</span></span>
+                        <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
+                            <span>⚡</span> GROQ AI ENGINE
+                        </span>
+                        <span><span class="status-dot {dot_cls}"></span><span style="font-size:11.5px; font-weight:700; color:{st_color};">{st_label}</span></span>
                     </div>
-                    <div class="mono" style="font-size:12px; font-weight:600; color:#e6ecf7; margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                    <div class="mono" style="font-size:12px; font-weight:600; color:#e6ecf7; margin-top:8px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
                         {chips_html}
                     </div>
                     <div style="font-size:11px; color:#7d8aa5; margin-top:4px;">{lat_str} API ping latency</div>
@@ -818,69 +966,89 @@ def render_kpis(summary: Dict[str, Any], alerts_sample: List[Dict[str, Any]]) ->
     c1, c2, c3, c4, c5 = st.columns(5)
 
     with c1:
-        sp_svg = sparkline_svg(spark_vals, "#22d3ee", "rgba(34,211,238,0.12)")
+        sp_svg = sparkline_svg(spark_vals, "#22d3ee", "rgba(34,211,238,0.15)")
         st.markdown(
             f"""
             <div class="soc-card kpi-card">
                 <div class="kpi-strip strip-cyan"></div>
-                <div style="color:#7d8aa5; font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;">Total Stored Alerts</div>
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:8px;">
-                    <span class="mono" style="font-size:28px; font-weight:700; color:#22d3ee; line-height:1;">{alert_count:,}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="color:#7d8aa5; font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">TOTAL ALERTS</div>
+                    <span style="font-size:13px;">📊</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
+                    <span class="mono" style="font-size:28px; font-weight:800; color:#22d3ee; line-height:1; letter-spacing:-0.02em;">{alert_count:,}</span>
                     <div>{sp_svg}</div>
                 </div>
-                <div style="font-size:11px; color:#7d8aa5; margin-top:8px;">Continuous SIEM ingestion</div>
+                <div style="font-size:11px; color:#7d8aa5; margin-top:10px; display:flex; align-items:center; gap:5px;">
+                    <span style="color:#22d3ee;">●</span> Continuous SIEM Ingestion
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
     with c2:
-        sp_svg = sparkline_svg([max(1, open_incidents)] * 6, "#f97316", "rgba(249,115,22,0.12)")
+        sp_svg = sparkline_svg([max(1, open_incidents)] * 6, "#f97316", "rgba(249,115,22,0.15)")
         st.markdown(
             f"""
             <div class="soc-card kpi-card">
                 <div class="kpi-strip strip-orange"></div>
-                <div style="color:#7d8aa5; font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;">Open Incidents</div>
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:8px;">
-                    <span class="mono" style="font-size:28px; font-weight:700; color:#f97316; line-height:1;">{open_incidents}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="color:#7d8aa5; font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">OPEN INCIDENTS</div>
+                    <span style="font-size:13px;">🔥</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
+                    <span class="mono" style="font-size:28px; font-weight:800; color:#f97316; line-height:1; letter-spacing:-0.02em;">{open_incidents}</span>
                     <div>{sp_svg}</div>
                 </div>
-                <div style="font-size:11px; color:#7d8aa5; margin-top:8px;">Active correlated clusters</div>
+                <div style="font-size:11px; color:#7d8aa5; margin-top:10px; display:flex; align-items:center; gap:5px;">
+                    <span style="color:#f97316;">●</span> Correlated Threat Clusters
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
     with c3:
-        sp_svg = sparkline_svg([crit_count, high_count, crit_count + 1, high_count], "#f43f5e", "rgba(244,63,94,0.12)")
+        sp_svg = sparkline_svg([crit_count, high_count, crit_count + 1, high_count], "#f43f5e", "rgba(244,63,94,0.15)")
         val_color = "#f43f5e" if high_crit > 0 else "#e6ecf7"
         st.markdown(
             f"""
             <div class="soc-card kpi-card">
                 <div class="kpi-strip strip-red"></div>
-                <div style="color:#7d8aa5; font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;">High / Critical Alerts</div>
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:8px;">
-                    <span class="mono" style="font-size:28px; font-weight:700; color:{val_color}; line-height:1;">{high_crit}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="color:#7d8aa5; font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">HIGH / CRITICAL</div>
+                    <span style="font-size:13px;">🚨</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
+                    <span class="mono" style="font-size:28px; font-weight:800; color:{val_color}; line-height:1; letter-spacing:-0.02em;">{high_crit}</span>
                     <div>{sp_svg}</div>
                 </div>
-                <div style="font-size:11px; color:#f43f5e; margin-top:8px;">{crit_count} Critical · {high_count} High</div>
+                <div style="font-size:11px; color:#fb7185; margin-top:10px; font-weight:600;">
+                    {crit_count} Critical · {high_count} High
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
     with c4:
-        sp_svg = sparkline_svg([active_agents] * 6, "#3b82f6", "rgba(59,130,246,0.12)")
+        sp_svg = sparkline_svg([active_agents] * 6, "#3b82f6", "rgba(59,130,246,0.15)")
         st.markdown(
             f"""
             <div class="soc-card kpi-card">
                 <div class="kpi-strip strip-cyan"></div>
-                <div style="color:#7d8aa5; font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;">Active Monitored Hosts</div>
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:8px;">
-                    <span class="mono" style="font-size:28px; font-weight:700; color:#3b82f6; line-height:1;">{active_agents}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="color:#7d8aa5; font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">MONITORED HOSTS</div>
+                    <span style="font-size:13px;">💻</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
+                    <span class="mono" style="font-size:28px; font-weight:800; color:#38bdf8; line-height:1; letter-spacing:-0.02em;">{active_agents}</span>
                     <div>{sp_svg}</div>
                 </div>
-                <div style="font-size:11px; color:#7d8aa5; margin-top:8px;">Connected endpoint agents</div>
+                <div style="font-size:11px; color:#7d8aa5; margin-top:10px; display:flex; align-items:center; gap:5px;">
+                    <span style="color:#38bdf8;">●</span> Connected Endpoint Agents
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -891,11 +1059,16 @@ def render_kpis(summary: Dict[str, Any], alerts_sample: List[Dict[str, Any]]) ->
             f"""
             <div class="soc-card kpi-card">
                 <div class="kpi-strip strip-violet"></div>
-                <div style="color:#7d8aa5; font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;">Latest Activity</div>
-                <div style="margin-top:8px;">
-                    <span class="mono" style="font-size:24px; font-weight:700; color:#c4b5fd; line-height:1;">{time_part}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="color:#7d8aa5; font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">LATEST ACTIVITY</div>
+                    <span style="font-size:13px;">⏱️</span>
                 </div>
-                <div class="mono" style="font-size:11px; color:#7d8aa5; margin-top:8px;">{date_part} UTC</div>
+                <div style="margin-top:10px;">
+                    <span class="mono" style="font-size:24px; font-weight:800; color:#c4b5fd; line-height:1; letter-spacing:-0.01em;">{time_part}</span>
+                </div>
+                <div class="mono" style="font-size:11px; color:#7d8aa5; margin-top:10px;">
+                    {date_part} UTC Sync
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -907,13 +1080,18 @@ def render_page_header(icon: str, title: str, subtitle: str) -> None:
     """Styled page section header replacing bare st.markdown('### ...')."""
     st.markdown(
         f"""
-        <div style="margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid #1c2740;">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span style="font-size:22px;">{icon}</span>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 20px; background:linear-gradient(180deg, rgba(16,24,42,0.85) 0%, rgba(10,16,30,0.92) 100%); border:1px solid rgba(255,255,255,0.08); border-radius:14px; margin-bottom:20px; backdrop-filter:blur(16px); box-shadow:0 8px 24px rgba(0,0,0,0.35);">
+            <div style="display:flex; align-items:center; gap:14px;">
+                <div style="width:38px; height:38px; border-radius:10px; background:rgba(34,211,238,0.12); border:1px solid rgba(34,211,238,0.35); display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow:0 0 16px rgba(34,211,238,0.2);">
+                    {icon}
+                </div>
                 <div>
-                    <h2 style="margin:0; font-size:20px; font-weight:700; color:#e6ecf7; letter-spacing:-0.01em;">{html.escape(title)}</h2>
+                    <h2 style="margin:0; font-size:18px; font-weight:800; color:#e6ecf7; letter-spacing:-0.02em;">{html.escape(title)}</h2>
                     <div style="font-size:12px; color:#7d8aa5; margin-top:2px;">{html.escape(subtitle)}</div>
                 </div>
+            </div>
+            <div style="font-size:11px; font-weight:700; color:#22d3ee; background:rgba(34,211,238,0.08); border:1px solid rgba(34,211,238,0.25); padding:4px 10px; border-radius:6px; letter-spacing:0.06em;">
+                OPERATIONAL
             </div>
         </div>
         """,
@@ -1064,6 +1242,7 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
             <span class="pill pill-high">{high} HIGH</span>
             <span class="pill pill-medium">{med} MEDIUM</span>
             <span class="pill pill-low">{low} LOW</span>
+            <span style="background:rgba(34,211,238,0.1); color:#22d3ee; border:1px solid rgba(34,211,238,0.3); padding:3px 9px; border-radius:9999px; font-size:10px; font-weight:700; letter-spacing:0.06em;">STREAM SYNCED</span>
         </div>
         """
 
@@ -1082,24 +1261,24 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                 <tr>
                     <td class="mono" style="color:#7d8aa5; font-size:11px; white-space:nowrap;">{ts_str}</td>
                     <td>{sev_pill}</td>
-                    <td style="max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{desc}">{desc}</td>
-                    <td class="mono" style="color:#c4b5fd;">{host}</td>
-                    <td class="mono" style="color:#22d3ee;">{src_ip}</td>
+                    <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500;" title="{desc}">{desc}</td>
+                    <td class="mono" style="color:#c4b5fd; font-weight:600;">{host}</td>
+                    <td class="mono" style="color:#22d3ee; font-weight:600;">{src_ip}</td>
                     <td>{m_chips}</td>
-                    <td class="mono" style="text-align:center; font-weight:700;">{lvl}</td>
+                    <td class="mono" style="text-align:center; font-weight:700; color:#cbd5e1;">{lvl}</td>
                 </tr>
                 """
             )
 
-        table_content = "".join(feed_rows) or "<tr><td colspan='7' style='text-align:center; color:#7d8aa5;'>No alerts ingested yet</td></tr>"
+        table_content = "".join(feed_rows) or "<tr><td colspan='7' style='text-align:center; color:#7d8aa5; padding:24px;'>No alerts ingested yet</td></tr>"
 
         st.markdown(
             f"""
             <div class="soc-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
                     <div>
-                        <div style="font-size:14px; font-weight:700; color:#e6ecf7;">LIVE INGESTION ALERT FEED</div>
-                        <div style="font-size:11px; color:#7d8aa5;">Real-time Wazuh normalized events stream</div>
+                        <div style="font-size:14px; font-weight:800; color:#e6ecf7; letter-spacing:0.02em;">LIVE INGESTION ALERT FEED</div>
+                        <div style="font-size:11px; color:#7d8aa5; margin-top:2px;">Real-time Wazuh normalized events stream</div>
                     </div>
                     {pills_header}
                 </div>
@@ -1133,8 +1312,8 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
             st.markdown(
                 """
                 <div class="soc-card" style="margin-bottom:0;">
-                    <div style="font-size:13px; font-weight:700; color:#e6ecf7; margin-bottom:4px;">ALERT VOLUME · 24H</div>
-                    <div style="font-size:11px; color:#7d8aa5; margin-bottom:10px;">Aggregated alerts per hour</div>
+                    <div style="font-size:13px; font-weight:800; color:#e6ecf7; margin-bottom:2px; letter-spacing:0.02em;">ALERT VOLUME · 24H</div>
+                    <div style="font-size:11px; color:#7d8aa5; margin-bottom:10px;">Aggregated alerts distribution per hour</div>
                 """,
                 unsafe_allow_html=True,
             )
@@ -1172,8 +1351,9 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                 margin=dict(l=0, r=0, t=10, b=20),
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
+                hoverlabel=dict(bgcolor="#0d1422", font_size=11, font_family="JetBrains Mono"),
                 xaxis=dict(showgrid=False, color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
-                yaxis=dict(showgrid=True, gridcolor="#1c2740", color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
+                yaxis=dict(showgrid=True, gridcolor="rgba(28,39,64,0.6)", color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
             )
             st.plotly_chart(fig_vol, use_container_width=True, config={"displayModeBar": False})
             st.markdown("</div>", unsafe_allow_html=True)
@@ -1182,8 +1362,8 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
             st.markdown(
                 """
                 <div class="soc-card" style="margin-bottom:0;">
-                    <div style="font-size:13px; font-weight:700; color:#e6ecf7; margin-bottom:4px;">MITRE ATT&CK COVERAGE</div>
-                    <div style="font-size:11px; color:#7d8aa5; margin-bottom:10px;">Detected adversary techniques</div>
+                    <div style="font-size:13px; font-weight:800; color:#e6ecf7; margin-bottom:2px; letter-spacing:0.02em;">MITRE ATT&CK COVERAGE</div>
+                    <div style="font-size:11px; color:#7d8aa5; margin-bottom:10px;">Detected adversary techniques in feed</div>
                 """,
                 unsafe_allow_html=True,
             )
@@ -1220,7 +1400,8 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                     paper_bgcolor="rgba(0,0,0,0)",
                     plot_bgcolor="rgba(0,0,0,0)",
                     coloraxis_showscale=False,
-                    xaxis=dict(showgrid=True, gridcolor="#1c2740", color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
+                    hoverlabel=dict(bgcolor="#0d1422", font_size=11, font_family="JetBrains Mono"),
+                    xaxis=dict(showgrid=True, gridcolor="rgba(28,39,64,0.6)", color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
                     yaxis=dict(showgrid=False, color="#c4b5fd", tickfont=dict(size=10, family="JetBrains Mono"), autorange="reversed"),
                 )
                 st.plotly_chart(fig_m, use_container_width=True, config={"displayModeBar": False})
@@ -1246,11 +1427,12 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
         st.markdown(
             """
             <div class="soc-card soc-card-border-glow">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
                     <div>
-                        <div style="font-size:14px; font-weight:700; color:#22d3ee; letter-spacing:0.02em;">⚡ AI ANALYST VERDICT</div>
-                        <div style="font-size:11px; color:#7d8aa5;">Groq Automated Correlated Reasoning</div>
+                        <div style="font-size:14px; font-weight:800; color:#22d3ee; letter-spacing:0.04em;">⚡ AI ANALYST VERDICT</div>
+                        <div style="font-size:11px; color:#7d8aa5; margin-top:1px;">Groq Automated Correlated Reasoning Engine</div>
                     </div>
+                    <span style="background:rgba(34,211,238,0.1); color:#22d3ee; border:1px solid rgba(34,211,238,0.3); padding:2px 8px; border-radius:6px; font-size:10px; font-weight:700;">ACTIVE</span>
                 </div>
             """,
             unsafe_allow_html=True,
@@ -1291,22 +1473,22 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
 
             st.markdown(
                 f"""
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:14px 0;">
-                    <div style="background:#111a2c; border:1px solid #1c2740; border-radius:8px; padding:8px 10px;">
-                        <div style="font-size:10px; color:#7d8aa5;">SEVERITY</div>
-                        <div style="margin-top:2px;">{severity_pill(inc_sev)}</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0;">
+                    <div style="background:linear-gradient(180deg, rgba(17,26,44,0.9) 0%, rgba(13,20,34,0.95) 100%); border:1px solid rgba(255,255,255,0.07); border-left:3.5px solid #f43f5e; border-radius:10px; padding:10px 12px;">
+                        <div style="font-size:10px; font-weight:700; color:#7d8aa5; letter-spacing:0.05em; text-transform:uppercase;">SEVERITY</div>
+                        <div style="margin-top:4px;">{severity_pill(inc_sev)}</div>
                     </div>
-                    <div style="background:#111a2c; border:1px solid #1c2740; border-radius:8px; padding:8px 10px;">
-                        <div style="font-size:10px; color:#7d8aa5;">CONFIDENCE</div>
-                        <div class="mono" style="font-size:12px; font-weight:700; color:#22d3ee; margin-top:2px;">{html.escape(conf_val)}</div>
+                    <div style="background:linear-gradient(180deg, rgba(17,26,44,0.9) 0%, rgba(13,20,34,0.95) 100%); border:1px solid rgba(255,255,255,0.07); border-left:3.5px solid #22d3ee; border-radius:10px; padding:10px 12px;">
+                        <div style="font-size:10px; font-weight:700; color:#7d8aa5; letter-spacing:0.05em; text-transform:uppercase;">CONFIDENCE</div>
+                        <div class="mono" style="font-size:12.5px; font-weight:700; color:#22d3ee; margin-top:4px;">{html.escape(conf_val)}</div>
                     </div>
-                    <div style="background:#111a2c; border:1px solid #1c2740; border-radius:8px; padding:8px 10px;">
-                        <div style="font-size:10px; color:#7d8aa5;">AFFECTED ASSETS</div>
-                        <div class="mono" style="font-size:13px; font-weight:700; color:#e6ecf7; margin-top:2px;">{unique_assets} Endpoint(s)</div>
+                    <div style="background:linear-gradient(180deg, rgba(17,26,44,0.9) 0%, rgba(13,20,34,0.95) 100%); border:1px solid rgba(255,255,255,0.07); border-left:3.5px solid #8b5cf6; border-radius:10px; padding:10px 12px;">
+                        <div style="font-size:10px; font-weight:700; color:#7d8aa5; letter-spacing:0.05em; text-transform:uppercase;">AFFECTED ASSETS</div>
+                        <div class="mono" style="font-size:13px; font-weight:700; color:#e6ecf7; margin-top:4px;">{unique_assets} Endpoint(s)</div>
                     </div>
-                    <div style="background:#111a2c; border:1px solid #1c2740; border-radius:8px; padding:8px 10px;">
-                        <div style="font-size:10px; color:#7d8aa5;">LINKED EVENTS</div>
-                        <div class="mono" style="font-size:13px; font-weight:700; color:#e6ecf7; margin-top:2px;">{len(linked_alerts)} Alerts</div>
+                    <div style="background:linear-gradient(180deg, rgba(17,26,44,0.9) 0%, rgba(13,20,34,0.95) 100%); border:1px solid rgba(255,255,255,0.07); border-left:3.5px solid #3b82f6; border-radius:10px; padding:10px 12px;">
+                        <div style="font-size:10px; font-weight:700; color:#7d8aa5; letter-spacing:0.05em; text-transform:uppercase;">LINKED EVENTS</div>
+                        <div class="mono" style="font-size:13px; font-weight:700; color:#e6ecf7; margin-top:4px;">{len(linked_alerts)} Alerts</div>
                     </div>
                 </div>
                 """,
@@ -1318,16 +1500,18 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
             if stored_finding:
                 st.markdown(
                     f"""
-                    <div style="background:rgba(34,211,238,0.06); border:1px solid rgba(34,211,238,0.25); border-radius:8px; padding:10px; font-size:12px; color:#e6ecf7; margin-bottom:12px;">
-                        <div style="color:#22d3ee; font-weight:700; font-size:11px; margin-bottom:4px;">LATEST AI FINDING:</div>
-                        {html.escape(stored_finding)}
+                    <div style="background:linear-gradient(135deg, rgba(34,211,238,0.08) 0%, rgba(139,92,246,0.06) 100%); border:1px solid rgba(34,211,238,0.3); border-radius:12px; padding:14px; font-size:12.5px; color:#e6ecf7; margin-bottom:14px; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+                        <div style="display:flex; align-items:center; gap:6px; color:#22d3ee; font-weight:800; font-size:11px; letter-spacing:0.05em; margin-bottom:6px;">
+                            <span>🧠</span> LATEST AI SYNTHESIS & REASONING:
+                        </div>
+                        <div style="line-height:1.5;">{html.escape(stored_finding)}</div>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
             else:
                 st.markdown(
-                    '<div style="font-size:12px; color:#7d8aa5; margin-bottom:12px; font-style:italic;">'
+                    '<div style="font-size:12px; color:#7d8aa5; margin-bottom:14px; font-style:italic; padding:10px; background:rgba(255,255,255,0.02); border-radius:8px; border:1px dashed #1c2740;">'
                     'No AI analysis recorded yet for this incident. Click "Run AI Triage" below.'
                     '</div>',
                     unsafe_allow_html=True,
@@ -1369,7 +1553,10 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
             st.markdown(
                 """
                 <div class="soc-card">
-                    <div style="font-size:13px; font-weight:700; color:#e6ecf7; margin-bottom:12px;">INCIDENT ATTACK TIMELINE</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                        <div style="font-size:13px; font-weight:800; color:#e6ecf7; letter-spacing:0.02em;">INCIDENT ATTACK TIMELINE</div>
+                        <span style="font-size:11px; color:#7d8aa5;">Chronological events</span>
+                    </div>
                 """,
                 unsafe_allow_html=True,
             )
@@ -1387,10 +1574,10 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                 timeline_items.append(
                     f"""
                     <div class="timeline-item">
-                        <div class="timeline-node" style="background:{sev_color}; box-shadow:0 0 8px {sev_color};"></div>
+                        <div class="timeline-node" style="background:{sev_color}; box-shadow:0 0 10px {sev_color};"></div>
                         <div class="mono" style="font-size:11px; color:#7d8aa5;">{a_ts}</div>
-                        <div style="font-size:12px; font-weight:600; color:#e6ecf7; margin-top:2px;">{a_desc}</div>
-                        <div class="mono" style="font-size:11px; color:#c4b5fd;">Host/IP: {a_host}</div>
+                        <div style="font-size:12.5px; font-weight:600; color:#e6ecf7; margin-top:2px;">{a_desc}</div>
+                        <div class="mono" style="font-size:11px; color:#c4b5fd; margin-top:2px;">Host/IP: {a_host}</div>
                     </div>
                     """
                 )
