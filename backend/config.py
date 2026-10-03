@@ -1,7 +1,13 @@
+import logging
 from functools import lru_cache
 from typing import Literal, Optional
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, ValidationInfo, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+logger = logging.getLogger(__name__)
+
+# Model IDs from the old Llama setup that now return 404 model_not_found.
+RETIRED_MODEL_PREFIXES = ("llama", "meta-llama/")
 
 
 class Settings(BaseSettings):
@@ -59,6 +65,29 @@ class Settings(BaseSettings):
     aws_bedrock_default_temperature: float = Field(default=0.2, ge=0, le=1)
     aws_bedrock_max_tokens: int = Field(default=1200, ge=128, le=8192)
     wazuh_verify_tls: bool = False
+
+        @field_validator(
+        "llm_triage_model_id",
+        "llm_investigation_model_id",
+        "llm_response_model_id",
+        "llm_report_model_id",
+        "llm_manager_model_id",
+        mode="before",
+    )
+    @classmethod
+    def _replace_retired_models(cls, value: str, info: ValidationInfo) -> str:
+        """Stale .env files may still point at Llama models that Groq no longer serves."""
+        model = str(value).strip().strip('"').strip("'")
+        if model.startswith("model="):
+            model = model[len("model="):]
+        if not model or model.lower().startswith(RETIRED_MODEL_PREFIXES):
+            replacement = cls.model_fields[info.field_name].default
+            logger.warning(
+                "%s=%r is not available on Groq; using %r instead. Update your .env.",
+                info.field_name.upper(), value, replacement,
+            )
+            return replacement
+        return model
 
     def active_wazuh_api_url(self) -> str:
         return self.local_wazuh_api_url if self.wazuh_source == "local" else self.aws_wazuh_api_url
