@@ -200,28 +200,38 @@ def inject_css() -> None:
             animation: live-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
         }
 
-        /* ══ GLASSMORPHISM CARDS ══ */
-        .soc-card {
-            background: linear-gradient(180deg, rgba(16, 24, 42, 0.88) 0%, rgba(10, 16, 30, 0.92) 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-            margin-bottom: 18px;
+        /* ══ GLASSMORPHISM CARDS & CONTAINERS ══ */
+        .soc-card,
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            background: linear-gradient(180deg, rgba(16, 24, 42, 0.88) 0%, rgba(10, 16, 30, 0.92) 100%) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+            margin-bottom: 18px !important;
             position: relative;
             transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .soc-card:hover {
-            border-color: rgba(34, 211, 238, 0.28);
-            box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.65), 0 0 24px rgba(34, 211, 238, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        .soc-card {
+            padding: 20px;
+        }
+        div[data-testid="stVerticalBlockBorderWrapper"] > div {
+            padding: 20px !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .soc-card:hover,
+        div[data-testid="stVerticalBlockBorderWrapper"]:hover {
+            border-color: rgba(34, 211, 238, 0.28) !important;
+            box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.65), 0 0 24px rgba(34, 211, 238, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
         }
 
         .soc-card-border-glow {
-            border: 1px solid transparent;
+            border: 1px solid transparent !important;
             background: linear-gradient(180deg, rgba(17,26,44,0.92) 0%, rgba(13,20,34,0.92) 100%) padding-box,
-                        linear-gradient(135deg, rgba(34,211,238,0.5) 0%, rgba(139,92,246,0.5) 100%) border-box;
+                        linear-gradient(135deg, rgba(34,211,238,0.5) 0%, rgba(139,92,246,0.5) 100%) border-box !important;
         }
 
         /* ══ KPI CARDS & STRIPS ══ */
@@ -618,7 +628,7 @@ def sparkline_svg(values: List[int], stroke_color: str = "#22d3ee", fill_color: 
 # ── Top Bar & Header ──────────────────────────────────────────────────────────
 def render_topbar(current_page: str = PAGE_SOC_OVERVIEW) -> None:
     now_utc = datetime.now(timezone.utc).strftime("%H:%M:%S")
-    st.markdown(
+    st.html(
         f"""
         <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; background:linear-gradient(180deg, rgba(16,24,42,0.85) 0%, rgba(10,16,30,0.92) 100%); border:1px solid rgba(255,255,255,0.08); border-radius:16px; margin-bottom:14px; backdrop-filter:blur(20px); box-shadow:0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);">
             <div style="display:flex; align-items:center; gap:16px;">
@@ -649,8 +659,7 @@ def render_topbar(current_page: str = PAGE_SOC_OVERVIEW) -> None:
                 </div>
             </div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
     # Secondary Navigation Bar (accessible always, even when sidebar is collapsed)
@@ -686,16 +695,15 @@ def render_system_connections_strip() -> None:
 
     header_col, btn_col = st.columns([6, 1])
     with header_col:
-        st.markdown(
+        st.html(
             """
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
                 <div style="width:3px; height:14px; background:#22d3ee; border-radius:2px; box-shadow:0 0 8px #22d3ee;"></div>
                 <div style="font-size:11.5px; font-weight:700; color:#7d8aa5; letter-spacing:0.08em; text-transform:uppercase;">
-                    System Connections & Telemetry Mesh
+                    System Connections &amp; Telemetry Mesh
                 </div>
             </div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
     with btn_col:
         if st.button("↻ Re-check", key="recheck_conn_btn", use_container_width=True):
@@ -717,9 +725,8 @@ def render_system_connections_strip() -> None:
     with c1:
         if net_err or not data:
             host_str = urlparse(BACKEND_URL).netloc or BACKEND_URL
-            st.markdown(
-                f"""
-                <div class="conn-card conn-card-down">
+            st.html(
+                f"""<div class="conn-card conn-card-down">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
                             <span>🌐</span> BACKEND API
@@ -728,9 +735,7 @@ def render_system_connections_strip() -> None:
                     </div>
                     <div class="mono" style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">{html.escape(host_str)}</div>
                     <div style="font-size:11px; color:#f43f5e; margin-top:4px;">Backend unreachable at host</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
+                </div>"""
             )
         else:
             bk = data.get("backend", {})
@@ -738,9 +743,8 @@ def render_system_connections_strip() -> None:
             status_text = "Connected" if bk.get("status") == "ok" else "Error"
             dot_cls = "dot-green" if bk.get("status") == "ok" else "dot-red"
             border_cls = "conn-card-ok" if bk.get("status") == "ok" else "conn-card-down"
-            st.markdown(
-                f"""
-                <div class="conn-card {border_cls}">
+            st.html(
+                f"""<div class="conn-card {border_cls}">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
                             <span>🌐</span> BACKEND API
@@ -749,17 +753,14 @@ def render_system_connections_strip() -> None:
                     </div>
                     <div class="mono" style="font-size:13px; font-weight:600; color:#22d3ee; margin-top:8px;">{html.escape(host_str)}</div>
                     <div style="font-size:11px; color:#7d8aa5; margin-top:4px;">FastAPI v{html.escape(str(bk.get('version', '1.0')))} · Auth active</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
+                </div>"""
             )
 
     # 2. Database
     with c2:
         if net_err or not data:
-            st.markdown(
-                """
-                <div class="conn-card conn-card-down">
+            st.html(
+                """<div class="conn-card conn-card-down">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
                             <span>🗄️</span> DATABASE
@@ -768,9 +769,7 @@ def render_system_connections_strip() -> None:
                     </div>
                     <div style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">Unknown</div>
                     <div style="font-size:11px; color:#f43f5e; margin-top:4px;">Backend unreachable</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
+                </div>"""
             )
         else:
             db_info = data.get("database", {})
@@ -780,9 +779,8 @@ def render_system_connections_strip() -> None:
             engine_str = (db_info.get("engine") or "sqlite").upper()
             lat_str = f"{db_info.get('latency_ms', 0)} ms" if db_info.get("latency_ms") is not None else "—"
             cnt_str = f"{db_info.get('alert_count', 0)} alerts stored"
-            st.markdown(
-                f"""
-                <div class="conn-card {border_cls}">
+            st.html(
+                f"""<div class="conn-card {border_cls}">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
                             <span>🗄️</span> DATABASE
@@ -791,17 +789,14 @@ def render_system_connections_strip() -> None:
                     </div>
                     <div class="mono" style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">{engine_str} · {lat_str}</div>
                     <div style="font-size:11px; color:#7d8aa5; margin-top:4px;">{cnt_str}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
+                </div>"""
             )
 
     # 3. Wazuh SIEM
     with c3:
         if net_err or not data:
-            st.markdown(
-                """
-                <div class="conn-card conn-card-down">
+            st.html(
+                """<div class="conn-card conn-card-down">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
                             <span>🛡️</span> WAZUH SIEM
@@ -810,9 +805,7 @@ def render_system_connections_strip() -> None:
                     </div>
                     <div style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">Down</div>
                     <div style="font-size:11px; color:#f43f5e; margin-top:4px;">Check Wazuh credentials</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
+                </div>"""
             )
         else:
             wz = data.get("wazuh", {})
@@ -844,9 +837,8 @@ def render_system_connections_strip() -> None:
             else:
                 ag_str = "Agents summary ready"
 
-            st.markdown(
-                f"""
-                <div class="conn-card {border_cls}">
+            st.html(
+                f"""<div class="conn-card {border_cls}">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
                             <span>🛡️</span> WAZUH ({source_str})
@@ -855,17 +847,14 @@ def render_system_connections_strip() -> None:
                     </div>
                     <div class="mono" style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">Mgr {html.escape(mgr_ver)} · Idx {html.escape(idx_st)}</div>
                     <div style="font-size:11px; color:#7d8aa5; margin-top:4px;">{html.escape(ag_str)}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
+                </div>"""
             )
 
     # 4. Groq AI
     with c4:
         if net_err or not data:
-            st.markdown(
-                """
-                <div class="conn-card conn-card-down">
+            st.html(
+                """<div class="conn-card conn-card-down">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
                             <span>⚡</span> GROQ AI ENGINE
@@ -874,9 +863,7 @@ def render_system_connections_strip() -> None:
                     </div>
                     <div style="font-size:13px; font-weight:600; color:#e6ecf7; margin-top:8px;">Unreachable</div>
                     <div style="font-size:11px; color:#f43f5e; margin-top:4px;">Check backend connection</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
+                </div>"""
             )
         else:
             gq = data.get("groq", {})
@@ -907,9 +894,8 @@ def render_system_connections_strip() -> None:
             if gq_st == "down":
                 err_hint = f'<div style="font-size:10px; color:#f43f5e; margin-top:3px;">{html.escape(str(gq.get("error", "Check model in .env"))[:60])}</div>'
 
-            st.markdown(
-                f"""
-                <div class="conn-card {border_cls}">
+            st.html(
+                f"""<div class="conn-card {border_cls}">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:12px; font-weight:700; color:#cbd5e1; display:flex; align-items:center; gap:6px;">
                             <span>⚡</span> GROQ AI ENGINE
@@ -921,9 +907,7 @@ def render_system_connections_strip() -> None:
                     </div>
                     <div style="font-size:11px; color:#7d8aa5; margin-top:4px;">{lat_str} API ping latency</div>
                     {err_hint}
-                </div>
-                """,
-                unsafe_allow_html=True,
+                </div>"""
             )
 
     st.markdown("<div style='margin-bottom:14px;'></div>", unsafe_allow_html=True)
@@ -967,101 +951,88 @@ def render_kpis(summary: Dict[str, Any], alerts_sample: List[Dict[str, Any]]) ->
 
     with c1:
         sp_svg = sparkline_svg(spark_vals, "#22d3ee", "rgba(34,211,238,0.15)")
-        st.markdown(
-            f"""
-            <div class="soc-card kpi-card">
+        st.html(
+            f"""<div class="soc-card kpi-card">
                 <div class="kpi-strip strip-cyan"></div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div style="color:#7d8aa5; font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">TOTAL ALERTS</div>
-                    <span style="font-size:13px;">📊</span>
+                    <span style="font-size:13px;">&#128202;</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
                     <span class="mono" style="font-size:28px; font-weight:800; color:#22d3ee; line-height:1; letter-spacing:-0.02em;">{alert_count:,}</span>
                     <div>{sp_svg}</div>
                 </div>
                 <div style="font-size:11px; color:#7d8aa5; margin-top:10px; display:flex; align-items:center; gap:5px;">
-                    <span style="color:#22d3ee;">●</span> Continuous SIEM Ingestion
+                    <span style="color:#22d3ee;">&#9679;</span> Continuous SIEM Ingestion
                 </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
+            </div>"""
         )
 
     with c2:
         sp_svg = sparkline_svg([max(1, open_incidents)] * 6, "#f97316", "rgba(249,115,22,0.15)")
-        st.markdown(
-            f"""
-            <div class="soc-card kpi-card">
+        st.html(
+            f"""<div class="soc-card kpi-card">
                 <div class="kpi-strip strip-orange"></div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div style="color:#7d8aa5; font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">OPEN INCIDENTS</div>
-                    <span style="font-size:13px;">🔥</span>
+                    <span style="font-size:13px;">&#128293;</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
                     <span class="mono" style="font-size:28px; font-weight:800; color:#f97316; line-height:1; letter-spacing:-0.02em;">{open_incidents}</span>
                     <div>{sp_svg}</div>
                 </div>
                 <div style="font-size:11px; color:#7d8aa5; margin-top:10px; display:flex; align-items:center; gap:5px;">
-                    <span style="color:#f97316;">●</span> Correlated Threat Clusters
+                    <span style="color:#f97316;">&#9679;</span> Correlated Threat Clusters
                 </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
+            </div>"""
         )
 
     with c3:
         sp_svg = sparkline_svg([crit_count, high_count, crit_count + 1, high_count], "#f43f5e", "rgba(244,63,94,0.15)")
         val_color = "#f43f5e" if high_crit > 0 else "#e6ecf7"
-        st.markdown(
-            f"""
-            <div class="soc-card kpi-card">
+        st.html(
+            f"""<div class="soc-card kpi-card">
                 <div class="kpi-strip strip-red"></div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div style="color:#7d8aa5; font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">HIGH / CRITICAL</div>
-                    <span style="font-size:13px;">🚨</span>
+                    <span style="font-size:13px;">&#128680;</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
                     <span class="mono" style="font-size:28px; font-weight:800; color:{val_color}; line-height:1; letter-spacing:-0.02em;">{high_crit}</span>
                     <div>{sp_svg}</div>
                 </div>
                 <div style="font-size:11px; color:#fb7185; margin-top:10px; font-weight:600;">
-                    {crit_count} Critical · {high_count} High
+                    {crit_count} Critical &middot; {high_count} High
                 </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
+            </div>"""
         )
 
     with c4:
         sp_svg = sparkline_svg([active_agents] * 6, "#3b82f6", "rgba(59,130,246,0.15)")
-        st.markdown(
-            f"""
-            <div class="soc-card kpi-card">
+        st.html(
+            f"""<div class="soc-card kpi-card">
                 <div class="kpi-strip strip-cyan"></div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div style="color:#7d8aa5; font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">MONITORED HOSTS</div>
-                    <span style="font-size:13px;">💻</span>
+                    <span style="font-size:13px;">&#128187;</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
                     <span class="mono" style="font-size:28px; font-weight:800; color:#38bdf8; line-height:1; letter-spacing:-0.02em;">{active_agents}</span>
                     <div>{sp_svg}</div>
                 </div>
                 <div style="font-size:11px; color:#7d8aa5; margin-top:10px; display:flex; align-items:center; gap:5px;">
-                    <span style="color:#38bdf8;">●</span> Connected Endpoint Agents
+                    <span style="color:#38bdf8;">&#9679;</span> Connected Endpoint Agents
                 </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
+            </div>"""
         )
 
     with c5:
-        st.markdown(
-            f"""
-            <div class="soc-card kpi-card">
+        st.html(
+            f"""<div class="soc-card kpi-card">
                 <div class="kpi-strip strip-violet"></div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div style="color:#7d8aa5; font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">LATEST ACTIVITY</div>
-                    <span style="font-size:13px;">⏱️</span>
+                    <span style="font-size:13px;">&#9201;</span>
                 </div>
                 <div style="margin-top:10px;">
                     <span class="mono" style="font-size:24px; font-weight:800; color:#c4b5fd; line-height:1; letter-spacing:-0.01em;">{time_part}</span>
@@ -1069,9 +1040,7 @@ def render_kpis(summary: Dict[str, Any], alerts_sample: List[Dict[str, Any]]) ->
                 <div class="mono" style="font-size:11px; color:#7d8aa5; margin-top:10px;">
                     {date_part} UTC Sync
                 </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
+            </div>"""
         )
 
 
@@ -1257,8 +1226,7 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
             m_chips = mitre_chips(a.get("mitre_techniques"))
 
             feed_rows.append(
-                f"""
-                <tr>
+                f"""<tr>
                     <td class="mono" style="color:#7d8aa5; font-size:11px; white-space:nowrap;">{ts_str}</td>
                     <td>{sev_pill}</td>
                     <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500;" title="{desc}">{desc}</td>
@@ -1266,153 +1234,139 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                     <td class="mono" style="color:#22d3ee; font-weight:600;">{src_ip}</td>
                     <td>{m_chips}</td>
                     <td class="mono" style="text-align:center; font-weight:700; color:#cbd5e1;">{lvl}</td>
-                </tr>
-                """
+                </tr>"""
             )
 
         table_content = "".join(feed_rows) or "<tr><td colspan='7' style='text-align:center; color:#7d8aa5; padding:24px;'>No alerts ingested yet</td></tr>"
 
-        st.markdown(
-            f"""
-            <div class="soc-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-                    <div>
-                        <div style="font-size:14px; font-weight:800; color:#e6ecf7; letter-spacing:0.02em;">LIVE INGESTION ALERT FEED</div>
-                        <div style="font-size:11px; color:#7d8aa5; margin-top:2px;">Real-time Wazuh normalized events stream</div>
-                    </div>
-                    {pills_header}
+        feed_card_html = f"""<div class="soc-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <div>
+                    <div style="font-size:14px; font-weight:800; color:#e6ecf7; letter-spacing:0.02em;">LIVE INGESTION ALERT FEED</div>
+                    <div style="font-size:11px; color:#7d8aa5; margin-top:2px;">Real-time Wazuh normalized events stream</div>
                 </div>
-                <div style="overflow-x:auto;">
-                    <table class="soc-table">
-                        <thead>
-                            <tr>
-                                <th>TIME (UTC)</th>
-                                <th>SEVERITY</th>
-                                <th>RULE DESCRIPTION</th>
-                                <th>HOST</th>
-                                <th>SOURCE IP</th>
-                                <th>MITRE ATT&CK</th>
-                                <th style="text-align:center;">LVL</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {table_content}
-                        </tbody>
-                    </table>
-                </div>
+                {pills_header}
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            <div style="overflow-x:auto;">
+                <table class="soc-table">
+                    <thead>
+                        <tr>
+                            <th>TIME (UTC)</th>
+                            <th>SEVERITY</th>
+                            <th>RULE DESCRIPTION</th>
+                            <th>HOST</th>
+                            <th>SOURCE IP</th>
+                            <th>MITRE ATT&CK</th>
+                            <th style="text-align:center;">LVL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {table_content}
+                    </tbody>
+                </table>
+            </div>
+        </div>"""
+        st.html(feed_card_html)
 
         # Bottom Two Cards: 24h Alert Volume & MITRE Coverage
         c_vol, c_mitre = st.columns(2)
 
         with c_vol:
-            st.markdown(
-                """
-                <div class="soc-card" style="margin-bottom:0;">
+            with st.container(border=True):
+                st.html("""
                     <div style="font-size:13px; font-weight:800; color:#e6ecf7; margin-bottom:2px; letter-spacing:0.02em;">ALERT VOLUME · 24H</div>
                     <div style="font-size:11px; color:#7d8aa5; margin-bottom:10px;">Aggregated alerts distribution per hour</div>
-                """,
-                unsafe_allow_html=True,
-            )
+                """)
 
-            # Build Hourly Volume DataFrame
-            hours_dict: Dict[str, int] = {f"{h:02d}:00": 0 for h in range(24)}
-            for a in alerts_data:
-                ts_str = a.get("timestamp") or ""
-                if "T" in ts_str:
-                    try:
-                        h_key = f"{int(ts_str.split('T')[1][:2]):02d}:00"
-                        hours_dict[h_key] = hours_dict.get(h_key, 0) + 1
-                    except Exception:
-                        pass
+                # Build Hourly Volume DataFrame
+                hours_dict: Dict[str, int] = {f"{h:02d}:00": 0 for h in range(24)}
+                for a in alerts_data:
+                    ts_str = a.get("timestamp") or ""
+                    if "T" in ts_str:
+                        try:
+                            h_key = f"{int(ts_str.split('T')[1][:2]):02d}:00"
+                            hours_dict[h_key] = hours_dict.get(h_key, 0) + 1
+                        except Exception:
+                            pass
 
-            vol_df = pd.DataFrame({"Hour": list(hours_dict.keys()), "Alerts": list(hours_dict.values())})
-            busy_threshold = vol_df["Alerts"].max() * 0.75 if vol_df["Alerts"].max() > 0 else 100
+                vol_df = pd.DataFrame({"Hour": list(hours_dict.keys()), "Alerts": list(hours_dict.values())})
+                busy_threshold = vol_df["Alerts"].max() * 0.75 if vol_df["Alerts"].max() > 0 else 100
 
-            # Color bars: high load red, normal cyan
-            bar_colors = ["#f43f5e" if val >= busy_threshold and val > 0 else "#22d3ee" for val in vol_df["Alerts"]]
+                # Color bars: high load red, normal cyan
+                bar_colors = ["#f43f5e" if val >= busy_threshold and val > 0 else "#22d3ee" for val in vol_df["Alerts"]]
 
-            fig_vol = go.Figure(
-                data=[
-                    go.Bar(
-                        x=vol_df["Hour"],
-                        y=vol_df["Alerts"],
-                        marker_color=bar_colors,
-                        marker_line_width=0,
-                        hoverinfo="x+y",
-                    )
-                ]
-            )
-            fig_vol.update_layout(
-                height=190,
-                margin=dict(l=0, r=0, t=10, b=20),
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                hoverlabel=dict(bgcolor="#0d1422", font_size=11, font_family="JetBrains Mono"),
-                xaxis=dict(showgrid=False, color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
-                yaxis=dict(showgrid=True, gridcolor="rgba(28,39,64,0.6)", color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
-            )
-            st.plotly_chart(fig_vol, use_container_width=True, config={"displayModeBar": False})
-            st.markdown("</div>", unsafe_allow_html=True)
-
-        with c_mitre:
-            st.markdown(
-                """
-                <div class="soc-card" style="margin-bottom:0;">
-                    <div style="font-size:13px; font-weight:800; color:#e6ecf7; margin-bottom:2px; letter-spacing:0.02em;">MITRE ATT&CK COVERAGE</div>
-                    <div style="font-size:11px; color:#7d8aa5; margin-bottom:10px;">Detected adversary techniques in feed</div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-            # Count MITRE techniques
-            mitre_counts: Dict[str, int] = {}
-            for a in alerts_data:
-                techs = a.get("mitre_techniques")
-                if isinstance(techs, str):
-                    try:
-                        techs = json.loads(techs)
-                    except Exception:
-                        techs = [techs]
-                if isinstance(techs, list):
-                    for t in techs:
-                        if t:
-                            mitre_counts[t] = mitre_counts.get(t, 0) + 1
-
-            if mitre_counts:
-                m_df = pd.DataFrame(
-                    [{"Technique": k, "Detections": v} for k, v in sorted(mitre_counts.items(), key=lambda x: x[1], reverse=True)[:8]]
+                fig_vol = go.Figure(
+                    data=[
+                        go.Bar(
+                            x=vol_df["Hour"],
+                            y=vol_df["Alerts"],
+                            marker_color=bar_colors,
+                            marker_line_width=0,
+                            hoverinfo="x+y",
+                        )
+                    ]
                 )
-                fig_m = px.bar(
-                    m_df,
-                    x="Detections",
-                    y="Technique",
-                    orientation="h",
-                    color="Detections",
-                    color_continuous_scale=["#3b82f6", "#8b5cf6", "#f97316", "#f43f5e"],
-                )
-                fig_m.update_layout(
+                fig_vol.update_layout(
                     height=190,
                     margin=dict(l=0, r=0, t=10, b=20),
                     paper_bgcolor="rgba(0,0,0,0)",
                     plot_bgcolor="rgba(0,0,0,0)",
-                    coloraxis_showscale=False,
                     hoverlabel=dict(bgcolor="#0d1422", font_size=11, font_family="JetBrains Mono"),
-                    xaxis=dict(showgrid=True, gridcolor="rgba(28,39,64,0.6)", color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
-                    yaxis=dict(showgrid=False, color="#c4b5fd", tickfont=dict(size=10, family="JetBrains Mono"), autorange="reversed"),
+                    xaxis=dict(showgrid=False, color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
+                    yaxis=dict(showgrid=True, gridcolor="rgba(28,39,64,0.6)", color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
                 )
-                st.plotly_chart(fig_m, use_container_width=True, config={"displayModeBar": False})
-            else:
-                st.markdown(
-                    '<div style="height:190px; display:flex; align-items:center; justify-content:center; color:#7d8aa5; font-size:12px;">'
-                    'No MITRE ATT&CK techniques in current sample'
-                    '</div>',
-                    unsafe_allow_html=True,
-                )
-            st.markdown("</div>", unsafe_allow_html=True)
+                st.plotly_chart(fig_vol, use_container_width=True, config={"displayModeBar": False})
+
+        with c_mitre:
+            with st.container(border=True):
+                st.html("""
+                    <div style="font-size:13px; font-weight:800; color:#e6ecf7; margin-bottom:2px; letter-spacing:0.02em;">MITRE ATT&CK COVERAGE</div>
+                    <div style="font-size:11px; color:#7d8aa5; margin-bottom:10px;">Detected adversary techniques in feed</div>
+                """)
+
+                # Count MITRE techniques
+                mitre_counts: Dict[str, int] = {}
+                for a in alerts_data:
+                    techs = a.get("mitre_techniques")
+                    if isinstance(techs, str):
+                        try:
+                            techs = json.loads(techs)
+                        except Exception:
+                            techs = [techs]
+                    if isinstance(techs, list):
+                        for t in techs:
+                            if t:
+                                mitre_counts[t] = mitre_counts.get(t, 0) + 1
+
+                if mitre_counts:
+                    m_df = pd.DataFrame(
+                        [{"Technique": k, "Detections": v} for k, v in sorted(mitre_counts.items(), key=lambda x: x[1], reverse=True)[:8]]
+                    )
+                    fig_m = px.bar(
+                        m_df,
+                        x="Detections",
+                        y="Technique",
+                        orientation="h",
+                        color="Detections",
+                        color_continuous_scale=["#3b82f6", "#8b5cf6", "#f97316", "#f43f5e"],
+                    )
+                    fig_m.update_layout(
+                        height=190,
+                        margin=dict(l=0, r=0, t=10, b=20),
+                        paper_bgcolor="rgba(0,0,0,0)",
+                        plot_bgcolor="rgba(0,0,0,0)",
+                        coloraxis_showscale=False,
+                        hoverlabel=dict(bgcolor="#0d1422", font_size=11, font_family="JetBrains Mono"),
+                        xaxis=dict(showgrid=True, gridcolor="rgba(28,39,64,0.6)", color="#7d8aa5", tickfont=dict(size=9, family="JetBrains Mono")),
+                        yaxis=dict(showgrid=False, color="#c4b5fd", tickfont=dict(size=10, family="JetBrains Mono"), autorange="reversed"),
+                    )
+                    st.plotly_chart(fig_m, use_container_width=True, config={"displayModeBar": False})
+                else:
+                    st.html("""
+                        <div style="height:190px; display:flex; align-items:center; justify-content:center; color:#7d8aa5; font-size:12px;">
+                            No MITRE ATT&CK techniques in current sample
+                        </div>
+                    """)
 
     # ── Right Column: AI Verdict & Incident Timeline ──
     with col_right:
@@ -1423,10 +1377,8 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
         except Exception as exc:
             st.warning(f"Could not load incidents: {exc}")
 
-        # AI Analyst Verdict Card
-        st.markdown(
-            """
-            <div class="soc-card soc-card-border-glow">
+        with st.container(border=True):
+            st.html("""
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
                     <div>
                         <div style="font-size:14px; font-weight:800; color:#22d3ee; letter-spacing:0.04em;">⚡ AI ANALYST VERDICT</div>
@@ -1434,45 +1386,42 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                     </div>
                     <span style="background:rgba(34,211,238,0.1); color:#22d3ee; border:1px solid rgba(34,211,238,0.3); padding:2px 8px; border-radius:6px; font-size:10px; font-weight:700;">ACTIVE</span>
                 </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            """)
 
-        selected_inc_id: Optional[int] = None
-        if incidents:
-            inc_options = {f"Incident #{inc['id']} · {inc['title'][:32]}...": inc["id"] for inc in incidents}
-            inc_label = st.selectbox("Select Target Incident", options=list(inc_options.keys()), label_visibility="collapsed")
-            selected_inc_id = inc_options[inc_label]
-        else:
-            st.info("No correlated incidents recorded yet.")
+            selected_inc_id: Optional[int] = None
+            if incidents:
+                inc_options = {f"Incident #{inc['id']} · {inc['title'][:32]}...": inc["id"] for inc in incidents}
+                inc_label = st.selectbox("Select Target Incident", options=list(inc_options.keys()), label_visibility="collapsed")
+                selected_inc_id = inc_options[inc_label]
+            else:
+                st.info("No correlated incidents recorded yet.")
 
-        # Load Full Details for Selected Incident
-        inc_obj: Optional[Dict[str, Any]] = None
-        if selected_inc_id is not None:
-            try:
-                inc_obj = api_get(f"/api/incidents/{selected_inc_id}")
-            except Exception as exc:
-                st.error(f"Failed to fetch incident #{selected_inc_id}: {exc}")
+            # Load Full Details for Selected Incident
+            inc_obj: Optional[Dict[str, Any]] = None
+            if selected_inc_id is not None:
+                try:
+                    inc_obj = api_get(f"/api/incidents/{selected_inc_id}")
+                except Exception as exc:
+                    st.error(f"Failed to fetch incident #{selected_inc_id}: {exc}")
 
-        if inc_obj:
-            inc_sev = inc_obj.get("severity", "medium").lower()
-            repeat_count = inc_obj.get("repeat_count", 1)
-            linked_alerts = inc_obj.get("alerts", [])
-            max_lvl = max([a.get("rule_level", 3) for a in linked_alerts] or [3])
+            if inc_obj:
+                inc_sev = inc_obj.get("severity", "medium").lower()
+                repeat_count = inc_obj.get("repeat_count", 1)
+                linked_alerts = inc_obj.get("alerts", [])
+                max_lvl = max([a.get("rule_level", 3) for a in linked_alerts] or [3])
 
-            # Calculate risk gauge score
-            base_score = {"critical": 90, "high": 70, "medium": 45, "low": 20}.get(inc_sev, 30)
-            score = min(100, base_score + int(max_lvl * 0.8) + min(15, repeat_count * 2))
+                # Calculate risk gauge score
+                base_score = {"critical": 90, "high": 70, "medium": 45, "low": 20}.get(inc_sev, 30)
+                score = min(100, base_score + int(max_lvl * 0.8) + min(15, repeat_count * 2))
 
-            # Display Risk Gauge
-            st.markdown(risk_gauge_svg(score), unsafe_allow_html=True)
+                # Display Risk Gauge
+                st.html(risk_gauge_svg(score))
 
-            # Fact Tiles
-            conf_val = st.session_state.get(f"_conf_{selected_inc_id}", "HIGH (AI Ver)")
-            unique_assets = len({a.get("agent_name") for a in linked_alerts if a.get("agent_name")}) or 1
+                # Fact Tiles
+                conf_val = st.session_state.get(f"_conf_{selected_inc_id}", "HIGH (AI Ver)")
+                unique_assets = len({a.get("agent_name") for a in linked_alerts if a.get("agent_name")}) or 1
 
-            st.markdown(
-                f"""
+                fact_tiles_html = f"""
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0;">
                     <div style="background:linear-gradient(180deg, rgba(17,26,44,0.9) 0%, rgba(13,20,34,0.95) 100%); border:1px solid rgba(255,255,255,0.07); border-left:3.5px solid #f43f5e; border-radius:10px; padding:10px 12px;">
                         <div style="font-size:10px; font-weight:700; color:#7d8aa5; letter-spacing:0.05em; text-transform:uppercase;">SEVERITY</div>
@@ -1491,98 +1440,85 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                         <div class="mono" style="font-size:13px; font-weight:700; color:#e6ecf7; margin-top:4px;">{len(linked_alerts)} Alerts</div>
                     </div>
                 </div>
-                """,
-                unsafe_allow_html=True,
-            )
+                """
+                st.html(fact_tiles_html)
 
-            # Cached or generated finding text
-            stored_finding = st.session_state.get(f"_triage_finding_{selected_inc_id}")
-            if stored_finding:
-                st.markdown(
-                    f"""
-                    <div style="background:linear-gradient(135deg, rgba(34,211,238,0.08) 0%, rgba(139,92,246,0.06) 100%); border:1px solid rgba(34,211,238,0.3); border-radius:12px; padding:14px; font-size:12.5px; color:#e6ecf7; margin-bottom:14px; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
-                        <div style="display:flex; align-items:center; gap:6px; color:#22d3ee; font-weight:800; font-size:11px; letter-spacing:0.05em; margin-bottom:6px;">
-                            <span>🧠</span> LATEST AI SYNTHESIS & REASONING:
+                # Cached or generated finding text
+                stored_finding = st.session_state.get(f"_triage_finding_{selected_inc_id}")
+                if stored_finding:
+                    st.html(f"""
+                        <div style="background:linear-gradient(135deg, rgba(34,211,238,0.08) 0%, rgba(139,92,246,0.06) 100%); border:1px solid rgba(34,211,238,0.3); border-radius:12px; padding:14px; font-size:12.5px; color:#e6ecf7; margin-bottom:14px; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+                            <div style="display:flex; align-items:center; gap:6px; color:#22d3ee; font-weight:800; font-size:11px; letter-spacing:0.05em; margin-bottom:6px;">
+                                <span>🧠</span> LATEST AI SYNTHESIS & REASONING:
+                            </div>
+                            <div style="line-height:1.5;">{html.escape(stored_finding)}</div>
                         </div>
-                        <div style="line-height:1.5;">{html.escape(stored_finding)}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            else:
-                st.markdown(
-                    '<div style="font-size:12px; color:#7d8aa5; margin-bottom:14px; font-style:italic; padding:10px; background:rgba(255,255,255,0.02); border-radius:8px; border:1px dashed #1c2740;">'
-                    'No AI analysis recorded yet for this incident. Click "Run AI Triage" below.'
-                    '</div>',
-                    unsafe_allow_html=True,
-                )
+                    """)
+                else:
+                    st.html("""
+                        <div style="font-size:12px; color:#7d8aa5; margin-bottom:14px; font-style:italic; padding:10px; background:rgba(255,255,255,0.02); border-radius:8px; border:1px dashed #1c2740;">
+                            No AI analysis recorded yet for this incident. Click "Run AI Triage" below.
+                        </div>
+                    """)
 
-            # Action Buttons Row
-            b_col1, b_col2, b_col3 = st.columns(3)
-            with b_col1:
-                if st.button("⚡ Run AI Triage", key=f"btn_triage_{selected_inc_id}", use_container_width=True):
-                    with st.spinner("AI evaluating evidence..."):
-                        try:
-                            t_res = api_post(f"/api/incidents/{selected_inc_id}/analyze", {"task": "triage", "force": True})
-                            if t_res.get("status") == "AI analysis unavailable":
-                                render_error_card("AI Analysis Unavailable", t_res.get("detail", "Error"), "Check LLM models in backend")
-                            else:
-                                finding = t_res.get("result", {}).get("finding", "Triage completed successfully.")
-                                conf = t_res.get("result", {}).get("confidence_label", "HIGH")
-                                st.session_state[f"_triage_finding_{selected_inc_id}"] = finding
-                                st.session_state[f"_conf_{selected_inc_id}"] = conf.upper()
-                                st.session_state[f"_triage_res_{selected_inc_id}"] = t_res
-                                st.rerun(scope="app")  # full rerun to show result in place
-                        except Exception as e:
-                            render_error_card("Triage Request Failed", str(e))
-            with b_col2:
-                if st.button("🛡️ Response Plan", key=f"btn_resp_{selected_inc_id}", use_container_width=True):
-                    st.session_state["_active_incident_id"] = selected_inc_id
-                    st.session_state["_active_page"] = PAGE_RESPONSE_PLAN
-                    st.rerun(scope="app")
-            with b_col3:
-                if st.button("📄 Executive Report", key=f"btn_rep_{selected_inc_id}", use_container_width=True):
-                    st.session_state["_active_incident_id"] = selected_inc_id
-                    st.session_state["_active_page"] = PAGE_REPORTS
-                    st.rerun(scope="app")
-
-        st.markdown("</div>", unsafe_allow_html=True)
+                # Action Buttons Row
+                b_col1, b_col2, b_col3 = st.columns(3)
+                with b_col1:
+                    if st.button("⚡ Run AI Triage", key=f"btn_triage_{selected_inc_id}", use_container_width=True):
+                        with st.spinner("AI evaluating evidence..."):
+                            try:
+                                t_res = api_post(f"/api/incidents/{selected_inc_id}/analyze", {"task": "triage", "force": True})
+                                if t_res.get("status") == "AI analysis unavailable":
+                                    render_error_card("AI Analysis Unavailable", t_res.get("detail", "Error"), "Check LLM models in backend")
+                                else:
+                                    finding = t_res.get("result", {}).get("finding", "Triage completed successfully.")
+                                    conf = t_res.get("result", {}).get("confidence_label", "HIGH")
+                                    st.session_state[f"_triage_finding_{selected_inc_id}"] = finding
+                                    st.session_state[f"_conf_{selected_inc_id}"] = conf.upper()
+                                    st.session_state[f"_triage_res_{selected_inc_id}"] = t_res
+                                    st.rerun(scope="app")
+                            except Exception as e:
+                                render_error_card("Triage Request Failed", str(e))
+                with b_col2:
+                    if st.button("🛡️ Response Plan", key=f"btn_resp_{selected_inc_id}", use_container_width=True):
+                        st.session_state["_active_incident_id"] = selected_inc_id
+                        st.session_state["_active_page"] = PAGE_RESPONSE_PLAN
+                        st.rerun(scope="app")
+                with b_col3:
+                    if st.button("📄 Executive Report", key=f"btn_rep_{selected_inc_id}", use_container_width=True):
+                        st.session_state["_active_incident_id"] = selected_inc_id
+                        st.session_state["_active_page"] = PAGE_REPORTS
+                        st.rerun(scope="app")
 
         # Incident Timeline Card
         if inc_obj and inc_obj.get("alerts"):
-            st.markdown(
-                """
-                <div class="soc-card">
+            with st.container(border=True):
+                sorted_alerts = sorted(inc_obj.get("alerts", []), key=lambda x: str(x.get("timestamp") or ""))
+                timeline_items = []
+                for a in sorted_alerts[:8]:
+                    a_sev = (a.get("severity") or "unknown").lower()
+                    sev_color = {"critical": "#f43f5e", "high": "#f97316", "medium": "#eab308", "low": "#22c55e"}.get(a_sev, "#6b7280")
+                    a_ts = (a.get("timestamp") or "-")[:19].replace("T", " ")
+                    a_desc = html.escape(str(a.get("rule_description") or a.get("rule_id") or "Alert"))
+                    a_host = html.escape(str(a.get("agent_name") or a.get("src_ip") or "Endpoint"))
+
+                    timeline_items.append(
+                        f"""<div class="timeline-item">
+                            <div class="timeline-node" style="background:{sev_color}; box-shadow:0 0 10px {sev_color};"></div>
+                            <div class="mono" style="font-size:11px; color:#7d8aa5;">{a_ts}</div>
+                            <div style="font-size:12.5px; font-weight:600; color:#e6ecf7; margin-top:2px;">{a_desc}</div>
+                            <div class="mono" style="font-size:11px; color:#c4b5fd; margin-top:2px;">Host/IP: {a_host}</div>
+                        </div>"""
+                    )
+
+                timeline_card_html = f"""
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
                         <div style="font-size:13px; font-weight:800; color:#e6ecf7; letter-spacing:0.02em;">INCIDENT ATTACK TIMELINE</div>
                         <span style="font-size:11px; color:#7d8aa5;">Chronological events</span>
                     </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-            # Sort alerts chronologically
-            sorted_alerts = sorted(inc_obj.get("alerts", []), key=lambda x: str(x.get("timestamp") or ""))
-            timeline_items = []
-            for a in sorted_alerts[:8]:
-                a_sev = (a.get("severity") or "unknown").lower()
-                sev_color = {"critical": "#f43f5e", "high": "#f97316", "medium": "#eab308", "low": "#22c55e"}.get(a_sev, "#6b7280")
-                a_ts = (a.get("timestamp") or "-")[:19].replace("T", " ")
-                a_desc = html.escape(str(a.get("rule_description") or a.get("rule_id") or "Alert"))
-                a_host = html.escape(str(a.get("agent_name") or a.get("src_ip") or "Endpoint"))
-
-                timeline_items.append(
-                    f"""
-                    <div class="timeline-item">
-                        <div class="timeline-node" style="background:{sev_color}; box-shadow:0 0 10px {sev_color};"></div>
-                        <div class="mono" style="font-size:11px; color:#7d8aa5;">{a_ts}</div>
-                        <div style="font-size:12.5px; font-weight:600; color:#e6ecf7; margin-top:2px;">{a_desc}</div>
-                        <div class="mono" style="font-size:11px; color:#c4b5fd; margin-top:2px;">Host/IP: {a_host}</div>
-                    </div>
-                    """
-                )
-
-            st.markdown("".join(timeline_items) + "</div>", unsafe_allow_html=True)
+                    {"".join(timeline_items)}
+                """
+                st.html(timeline_card_html)
 
     # ── Bottom Section: Trigger Manual Ingestion ──
     st.markdown("<div style='margin-top:24px;'></div>", unsafe_allow_html=True)
@@ -1879,29 +1815,24 @@ def page_investigation() -> None:
     # Display AI Investigation Results if cached
     inv_result = st.session_state.get(f"_inv_res_{incident_id}")
     if inv_result:
-        st.markdown(
-            f"""
-            <div class="soc-card">
+        steps = inv_result.get("next_investigation_steps") or inv_result.get("recommended_actions") or []
+        step_items_html = "".join(
+            f"""<div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:8px;">
+                    <div class="mono" style="background:#1c2740; color:#22d3ee; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">{idx}</div>
+                    <div style="font-size:12px; color:#e6ecf7; line-height:1.4;">{html.escape(str(step))}</div>
+                </div>"""
+            for idx, step in enumerate(steps, start=1)
+        )
+        st.html(
+            f"""<div class="soc-card">
                 <div style="font-size:14px; font-weight:700; color:#22d3ee; margin-bottom:8px;">AI INVESTIGATION SUMMARY</div>
                 <div style="font-size:13px; color:#e6ecf7; line-height:1.5; margin-bottom:14px;">
                     {html.escape(inv_result.get('timeline_summary') or inv_result.get('finding') or '')}
                 </div>
                 <div style="font-size:13px; font-weight:700; color:#c4b5fd; margin-bottom:8px;">RECOMMENDED NEXT INVESTIGATION STEPS:</div>
-            """,
-            unsafe_allow_html=True,
+                {step_items_html}
+            </div>"""
         )
-        steps = inv_result.get("next_investigation_steps") or inv_result.get("recommended_actions") or []
-        for step_idx, step in enumerate(steps, start=1):
-            st.markdown(
-                f"""
-                <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:8px;">
-                    <div class="mono" style="background:#1c2740; color:#22d3ee; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">{step_idx}</div>
-                    <div style="font-size:12px; color:#e6ecf7; line-height:1.4;">{html.escape(str(step))}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-        st.markdown("</div>", unsafe_allow_html=True)
 
     # Linked Alerts Table
     st.subheader(f"Linked SIEM Alerts ({len(linked_alerts)})")
@@ -1998,33 +1929,18 @@ def page_ai_analyst() -> None:
     cached_res = st.session_state.get(f"_ai_analyst_res_{incident_id}_{task_choice}")
     if cached_res:
         res_data = cached_res.get("result", {})
-        conf_pill = f'<span class="pill pill-high">{html.escape(str(res_data.get("confidence_label", "high")).upper())}</span>'
+        conf_label = html.escape(str(res_data.get("confidence_label", "high")).upper())
+        conf_pill = f'<span class="pill pill-high">{conf_label}</span>'
         finding_text = html.escape(str(res_data.get("finding", "Analysis complete.")))
 
-        st.markdown(
-            f"""
-            <div class="soc-card soc-card-border-glow" style="margin-top:16px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <div style="font-size:14px; font-weight:700; color:#22d3ee; text-transform:uppercase;">
-                        {html.escape(task_choice)} Verdict
-                    </div>
-                    <div>Confidence: {conf_pill}</div>
-                </div>
-                <div style="font-size:14px; color:#e6ecf7; line-height:1.5; margin-bottom:14px;">
-                    {finding_text}
-                </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        # Manager specific fields
+        # Manager specific extras
+        mgr_html = ""
         if task_choice == "manager":
             wh = html.escape(str(res_data.get("what_happened", "N/A")))
             why = html.escape(str(res_data.get("why_it_might_matter", "N/A")))
             aff = res_data.get("affected_systems", [])
-            st.markdown(
-                f"""
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+            aff_chips = "".join([f'<span class="mono" style="background:#1c2740; color:#c4b5fd; padding:2px 6px; border-radius:4px; margin-left:4px; font-size:11px;">{html.escape(str(s))}</span>' for s in aff]) or " None specified"
+            mgr_html = f"""<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
                     <div style="background:#111a2c; border:1px solid #1c2740; border-radius:8px; padding:12px;">
                         <div style="font-size:11px; font-weight:700; color:#22d3ee; margin-bottom:4px;">WHAT HAPPENED</div>
                         <div style="font-size:12px; color:#e6ecf7;">{wh}</div>
@@ -2035,40 +1951,39 @@ def page_ai_analyst() -> None:
                     </div>
                 </div>
                 <div style="margin-bottom:14px;">
-                    <span style="font-size:11px; color:#7d8aa5;">AFFECTED SYSTEMS:</span>
-                    {"".join([f'<span class="mono" style="background:#1c2740; color:#c4b5fd; padding:2px 6px; border-radius:4px; margin-left:4px; font-size:11px;">{html.escape(str(s))}</span>' for s in aff]) or ' None specified'}
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+                    <span style="font-size:11px; color:#7d8aa5;">AFFECTED SYSTEMS:</span>{aff_chips}
+                </div>"""
 
-        # Recommended Actions
+        # Actions HTML
         actions = res_data.get("recommended_actions", [])
+        actions_html = ""
         if actions:
-            st.markdown('<div style="font-size:12px; font-weight:700; color:#22d3ee; margin-bottom:8px;">RECOMMENDED ACTIONS:</div>', unsafe_allow_html=True)
-            for act in actions:
-                st.markdown(
-                    f"""
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                        <span style="color:#22c55e;">✔</span>
-                        <span style="font-size:12px; color:#e6ecf7;">{html.escape(str(act))}</span>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
+            acts = "".join([f'<div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;"><span style="color:#22c55e;">&#10004;</span><span style="font-size:12px; color:#e6ecf7;">{html.escape(str(act))}</span></div>' for act in actions])
+            actions_html = f'<div style="font-size:12px; font-weight:700; color:#22d3ee; margin-bottom:8px;">RECOMMENDED ACTIONS:</div>{acts}'
 
-        # Evidence references and Unknowns
+        # Evidence & Unknowns HTML
+        footer_html = ""
         refs = res_data.get("evidence_refs", [])
         unknowns = res_data.get("unknowns", [])
         if refs:
             chips = "".join([f'<span class="mono" style="background:rgba(34,211,238,0.1); color:#22d3ee; padding:2px 6px; border-radius:4px; margin-right:4px; font-size:10px;">{html.escape(str(r))}</span>' for r in refs])
-            st.markdown(f'<div style="margin-top:12px; font-size:11px; color:#7d8aa5;">EVIDENCE REFERENCES: {chips}</div>', unsafe_allow_html=True)
-
+            footer_html += f'<div style="margin-top:12px; font-size:11px; color:#7d8aa5;">EVIDENCE REFERENCES: {chips}</div>'
         if unknowns:
             u_text = ", ".join([html.escape(str(u)) for u in unknowns])
-            st.markdown(f'<div style="margin-top:6px; font-size:11px; color:#9ca3af;">UNKNOWNS / BLIND SPOTS: <i>{u_text}</i></div>', unsafe_allow_html=True)
+            footer_html += f'<div style="margin-top:6px; font-size:11px; color:#9ca3af;">UNKNOWNS / BLIND SPOTS: <i>{u_text}</i></div>'
 
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.html(
+            f"""<div class="soc-card soc-card-border-glow" style="margin-top:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <div style="font-size:14px; font-weight:700; color:#22d3ee; text-transform:uppercase;">{html.escape(task_choice)} Verdict</div>
+                    <div>Confidence: {conf_pill}</div>
+                </div>
+                <div style="font-size:14px; color:#e6ecf7; line-height:1.5; margin-bottom:14px;">{finding_text}</div>
+                {mgr_html}
+                {actions_html}
+                {footer_html}
+            </div>"""
+        )
 
         with st.expander("Inspect Raw JSON Result"):
             st.json(cached_res)
@@ -2131,35 +2046,35 @@ def page_response_plan() -> None:
 
     resp_data = st.session_state.get(f"_resp_res_{incident_id}")
     if resp_data:
-        st.markdown(
-            f"""
-            <div class="soc-card soc-card-border-glow" style="margin-top:16px;">
+        finding_text = html.escape(str(resp_data.get('finding') or 'Defensive plan ready.'))
+        impact_text = html.escape(str(resp_data.get('impact') or 'Low operational disruption expected.'))
+
+        rollback_steps = resp_data.get("rollback", [])
+        rollback_html = "".join([f'<div style="font-size:12px; color:#e6ecf7; margin-bottom:6px;"><b>{idx}.</b> {html.escape(str(step))}</div>' for idx, step in enumerate(rollback_steps, start=1)])
+
+        verify_steps = resp_data.get("verification", [])
+        verify_html = "".join([f'<div style="font-size:12px; color:#e6ecf7; margin-bottom:6px;"><b>{idx}.</b> {html.escape(str(step))}</div>' for idx, step in enumerate(verify_steps, start=1)])
+
+        st.html(
+            f"""<div class="soc-card soc-card-border-glow" style="margin-top:16px;">
                 <div style="font-size:14px; font-weight:700; color:#22d3ee; margin-bottom:8px;">PROPOSED MITIGATION STRATEGY</div>
-                <div style="font-size:13px; color:#e6ecf7; line-height:1.5; margin-bottom:14px;">
-                    {html.escape(str(resp_data.get('finding') or 'Defensive plan ready.'))}
-                </div>
+                <div style="font-size:13px; color:#e6ecf7; line-height:1.5; margin-bottom:14px;">{finding_text}</div>
                 <div style="background:rgba(249,115,22,0.1); border:1px solid #f97316; border-radius:8px; padding:10px 12px; margin-bottom:16px;">
                     <div style="font-size:11px; font-weight:700; color:#f97316;">OPERATIONAL IMPACT ASSESSMENT</div>
-                    <div style="font-size:12px; color:#fdba74; margin-top:2px;">{html.escape(str(resp_data.get('impact') or 'Low operational disruption expected.'))}</div>
+                    <div style="font-size:12px; color:#fdba74; margin-top:2px;">{impact_text}</div>
                 </div>
-            """,
-            unsafe_allow_html=True,
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div>
+                        <div style="font-size:12px; font-weight:700; color:#c4b5fd; margin-bottom:8px;">ROLLBACK PLAN</div>
+                        {rollback_html or '<div style="font-size:12px; color:#7d8aa5;">No rollback steps provided.</div>'}
+                    </div>
+                    <div>
+                        <div style="font-size:12px; font-weight:700; color:#22d3ee; margin-bottom:8px;">VERIFICATION CRITERIA</div>
+                        {verify_html or '<div style="font-size:12px; color:#7d8aa5;">No verification criteria provided.</div>'}
+                    </div>
+                </div>
+            </div>"""
         )
-
-        c_roll, c_ver = st.columns(2)
-        with c_roll:
-            st.markdown('<div style="font-size:12px; font-weight:700; color:#c4b5fd; margin-bottom:8px;">ROLLBACK PLAN</div>', unsafe_allow_html=True)
-            rollback_steps = resp_data.get("rollback", [])
-            for r_idx, step in enumerate(rollback_steps, start=1):
-                st.markdown(f'<div style="font-size:12px; color:#e6ecf7; margin-bottom:6px;"><b>{r_idx}.</b> {html.escape(str(step))}</div>', unsafe_allow_html=True)
-
-        with c_ver:
-            st.markdown('<div style="font-size:12px; font-weight:700; color:#22d3ee; margin-bottom:8px;">VERIFICATION CRITERIA</div>', unsafe_allow_html=True)
-            verify_steps = resp_data.get("verification", [])
-            for v_idx, step in enumerate(verify_steps, start=1):
-                st.markdown(f'<div style="font-size:12px; color:#e6ecf7; margin-bottom:6px;"><b>{v_idx}.</b> {html.escape(str(step))}</div>', unsafe_allow_html=True)
-
-        st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -2236,25 +2151,19 @@ def page_reports() -> None:
 
         # Timeline
         if timeline_items:
-            st.markdown(
-                """
-                <div class="soc-card">
-                    <div style="font-size:13px; font-weight:700; color:#e6ecf7; margin-bottom:12px;">INCIDENT EVENT TIMELINE</div>
-                """,
-                unsafe_allow_html=True,
-            )
-            for item in timeline_items:
-                item_text = json.dumps(item) if isinstance(item, dict) else str(item)
-                st.markdown(
-                    f"""
-                    <div class="timeline-item">
+            timeline_rows_html = "".join(
+                f"""<div class="timeline-item">
                         <div class="timeline-node" style="background:#22d3ee; box-shadow:0 0 6px #22d3ee;"></div>
-                        <div style="font-size:12px; color:#e6ecf7;">{html.escape(item_text)}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            st.markdown("</div>", unsafe_allow_html=True)
+                        <div style="font-size:12px; color:#e6ecf7;">{html.escape(json.dumps(item) if isinstance(item, dict) else str(item))}</div>
+                    </div>"""
+                for item in timeline_items
+            )
+            st.html(
+                f"""<div class="soc-card">
+                    <div style="font-size:13px; font-weight:700; color:#e6ecf7; margin-bottom:12px;">INCIDENT EVENT TIMELINE</div>
+                    {timeline_rows_html}
+                </div>"""
+            )
 
         # Downloads Row
         md_content = f"# Incident Report #{incident_id}\n\n## Executive Summary\n{exec_sum}\n\n## Technical Summary\n{tech_sum}\n"
