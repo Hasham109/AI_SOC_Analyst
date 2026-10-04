@@ -4,11 +4,10 @@
   <img src="https://img.shields.io/badge/Security-SOC%20Analyst-blue?style=for-the-badge&logo=shield" alt="SOC Analyst"/>
   <img src="https://img.shields.io/badge/SIEM-Wazuh-00a4e4?style=for-the-badge&logo=wazuh&logoColor=white" alt="Wazuh SIEM"/>
   <img src="https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"/>
-  <img src="https://img.shields.io/badge/LLM-Groq%20Llama%203.3-f55036?style=for-the-badge" alt="Groq Llama 3.3"/>
+  <img src="https://img.shields.io/badge/LLM-Groq%20Llama%203.3-f55036?style=for-the-badge" alt="Openai/gpt-oss-20b"/>
   <img src="https://img.shields.io/badge/Frontend-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit"/>
   <img src="https://img.shields.io/badge/Database-SQLite%20%2F%20SQLAlchemy-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite"/>
   <img src="https://img.shields.io/badge/Framework-MITRE%20ATT%26CK-orange?style=for-the-badge" alt="MITRE ATT&CK"/>
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License MIT"/>
 </p>
 
 ---
