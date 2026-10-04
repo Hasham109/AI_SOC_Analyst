@@ -1,4 +1,4 @@
-# 🛡️ SENTINEL AI — Autonomous AI-Powered SOC Analyst Platform
+# 🛡️ SENTINEL AI — Autonomous SentinalIQ-AI Powered Security Operations Platform
 
 <p align="center">
   <img src="https://img.shields.io/badge/Security-SOC%20Analyst-blue?style=for-the-badge&logo=shield" alt="SOC Analyst"/>
