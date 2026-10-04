@@ -1475,8 +1475,7 @@ def page_alerts() -> None:
         m_chips = mitre_chips(a.get("mitre_techniques"))
 
         feed_rows.append(
-            f"""
-            <tr>
+            f"""<tr>
                 <td class="mono" style="color:#7d8aa5;">#{a_id}</td>
                 <td class="mono" style="color:#7d8aa5; font-size:11px; white-space:nowrap;">{ts_str}</td>
                 <td>{sev_pill}</td>
@@ -1485,37 +1484,32 @@ def page_alerts() -> None:
                 <td class="mono" style="color:#22d3ee;">{src_ip}</td>
                 <td>{m_chips}</td>
                 <td class="mono" style="text-align:center; font-weight:700;">{lvl}</td>
-            </tr>
-            """
+            </tr>"""
         )
 
-    table_content = "".join(feed_rows) or "<tr><td colspan='8' style='text-align:center; color:#7d8aa5;'>No matching alerts</td></tr>"
-    st.markdown(
-        f"""
-        <div class="soc-card">
-            <div style="overflow-x:auto;">
-                <table class="soc-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>TIMESTAMP (UTC)</th>
-                            <th>SEVERITY</th>
-                            <th>RULE DESCRIPTION</th>
-                            <th>HOST</th>
-                            <th>SRC IP</th>
-                            <th>MITRE ATT&CK</th>
-                            <th style="text-align:center;">LVL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {table_content}
-                    </tbody>
-                </table>
-            </div>
+    table_content = "".join(feed_rows) or "<tr><td colspan='8' style='text-align:center; color:#7d8aa5; padding:24px;'>No matching alerts</td></tr>"
+    alerts_table_html = f"""<div class="soc-card">
+        <div style="overflow-x:auto;">
+            <table class="soc-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>TIMESTAMP (UTC)</th>
+                        <th>SEVERITY</th>
+                        <th>RULE DESCRIPTION</th>
+                        <th>HOST</th>
+                        <th>SRC IP</th>
+                        <th>MITRE ATT&CK</th>
+                        <th style="text-align:center;">LVL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {table_content}
+                </tbody>
+            </table>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    </div>"""
+    st.html(alerts_table_html)
 
     # Pagination Buttons
     max_pages = max(1, math.ceil(total / page_limit))
@@ -1714,22 +1708,19 @@ def page_investigation() -> None:
         lvl = html.escape(str(a.get("rule_level") or "—"))
 
         feed_rows.append(
-            f"""
-            <tr>
+            f"""<tr>
                 <td class="mono" style="color:#7d8aa5; font-size:11px;">{ts_str}</td>
                 <td>{sev_pill}</td>
                 <td>{desc}</td>
                 <td class="mono" style="color:#c4b5fd;">{host}</td>
                 <td class="mono" style="color:#22d3ee;">{src_ip}</td>
                 <td class="mono" style="text-align:center; font-weight:700;">{lvl}</td>
-            </tr>
-            """
+            </tr>"""
         )
 
-    table_content = "".join(feed_rows) or "<tr><td colspan='6' style='text-align:center; color:#7d8aa5;'>No linked alerts</td></tr>"
-    st.markdown(
-        f"""
-        <div class="soc-card">
+    table_content = "".join(feed_rows) or "<tr><td colspan='6' style='text-align:center; color:#7d8aa5; padding:16px;'>No linked alerts</td></tr>"
+    inv_table_html = f"""<div class="soc-card">
+        <div style="overflow-x:auto;">
             <table class="soc-table">
                 <thead>
                     <tr>
@@ -1746,9 +1737,8 @@ def page_investigation() -> None:
                 </tbody>
             </table>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    </div>"""
+    st.html(inv_table_html)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
