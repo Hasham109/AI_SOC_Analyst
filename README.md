@@ -270,15 +270,8 @@ Execute the test suite to verify normalization, deduplication, cursor management
 pytest tests/ -v
 ```
 
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
-
 <p align="center">
   <b>Built for Modern Security Operations Centers</b><br/>
   <i>Streamlining Threat Detection, Correlation, and Incident Response with Generative AI.</i>
 </p>
+        
