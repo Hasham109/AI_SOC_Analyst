@@ -322,17 +322,24 @@ def inject_css() -> None:
             background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
             color: #070b14 !important;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12.5px;
             letter-spacing: 0.02em;
             border: none;
             border-radius: 10px;
-            padding: 9px 18px;
+            padding: 8px 12px;
             box-shadow: 0 4px 18px rgba(34, 211, 238, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer !important;
             position: relative;
             z-index: 2;
             pointer-events: auto !important;
+        }
+        div.stButton > button p {
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+            font-size: 12.5px !important;
+            font-weight: 700 !important;
         }
         div.stButton > button:hover {
             box-shadow: 0 6px 26px rgba(34, 211, 238, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -1329,30 +1336,30 @@ def page_soc_overview(summary: Dict[str, Any]) -> None:
                         </div>
                     """)
 
-                # Action Buttons Row
-                b_col1, b_col2, b_col3 = st.columns(3)
-                with b_col1:
-                    if st.button("⚡ Run AI Triage", key=f"btn_triage_{selected_inc_id}", use_container_width=True):
-                        with st.spinner("AI evaluating evidence..."):
-                            try:
-                                t_res = api_post(f"/api/incidents/{selected_inc_id}/analyze", {"task": "triage", "force": True})
-                                if t_res.get("status") == "AI analysis unavailable":
-                                    render_error_card("AI Analysis Unavailable", t_res.get("detail", "Error"), "Check LLM models in backend")
-                                else:
-                                    finding = t_res.get("result", {}).get("finding", "Triage completed successfully.")
-                                    conf = t_res.get("result", {}).get("confidence_label", "HIGH")
-                                    st.session_state[f"_triage_finding_{selected_inc_id}"] = finding
-                                    st.session_state[f"_conf_{selected_inc_id}"] = conf.upper()
-                                    st.session_state[f"_triage_res_{selected_inc_id}"] = t_res
-                                    st.rerun(scope="app")
-                            except Exception as e:
-                                render_error_card("Triage Request Failed", str(e))
-                with b_col2:
+                # Action Buttons
+                if st.button("⚡ Run AI Triage", key=f"btn_triage_{selected_inc_id}", use_container_width=True):
+                    with st.spinner("AI evaluating evidence..."):
+                        try:
+                            t_res = api_post(f"/api/incidents/{selected_inc_id}/analyze", {"task": "triage", "force": True})
+                            if t_res.get("status") == "AI analysis unavailable":
+                                render_error_card("AI Analysis Unavailable", t_res.get("detail", "Error"), "Check LLM models in backend")
+                            else:
+                                finding = t_res.get("result", {}).get("finding", "Triage completed successfully.")
+                                conf = t_res.get("result", {}).get("confidence_label", "HIGH")
+                                st.session_state[f"_triage_finding_{selected_inc_id}"] = finding
+                                st.session_state[f"_conf_{selected_inc_id}"] = conf.upper()
+                                st.session_state[f"_triage_res_{selected_inc_id}"] = t_res
+                                st.rerun(scope="app")
+                        except Exception as e:
+                            render_error_card("Triage Request Failed", str(e))
+
+                b_sub1, b_sub2 = st.columns(2)
+                with b_sub1:
                     if st.button("🛡️ Response Plan", key=f"btn_resp_{selected_inc_id}", use_container_width=True):
                         st.session_state["_active_incident_id"] = selected_inc_id
                         st.session_state["_active_page"] = PAGE_RESPONSE_PLAN
                         st.rerun(scope="app")
-                with b_col3:
+                with b_sub2:
                     if st.button("📄 Executive Report", key=f"btn_rep_{selected_inc_id}", use_container_width=True):
                         st.session_state["_active_incident_id"] = selected_inc_id
                         st.session_state["_active_page"] = PAGE_REPORTS
