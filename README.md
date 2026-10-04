@@ -171,7 +171,7 @@ AI_SOC_Analyst/
 | :--- | :--- |
 | **Frontend** | Streamlit, Plotly, Pandas, HTML5/CSS3 (Glassmorphism SOC Theme) |
 | **Backend** | FastAPI, Uvicorn, Pydantic v2, Python 3.11+ |
-| **LLM & Reasoning** | Groq Cloud SDK (`llama-3.3-70b-versatile`, `llama-3.1-8b-instant`), AWS Bedrock (Optional) |
+| **LLM & Reasoning** | Groq Cloud SDK (`Openai/gpt-os-20b`, `Openai/gpt-os-120b`), AWS Bedrock (Optional) |
 | **Database & ORM** | SQLite / PostgreSQL, SQLAlchemy 2.0 |
 | **Security Telemetry** | Wazuh SIEM (REST API & OpenSearch Indexer), MITRE ATT&CK Framework |
 | **Testing & CI** | Pytest, Pytest-Mock |
