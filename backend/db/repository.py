@@ -33,7 +33,7 @@ def get_alert(session: Session, alert_id: int) -> Optional[Alert]:
     return session.get(Alert, alert_id)
 
 
-def list_incidents(session: Session, limit: int = 100) -> List[Incident]:
+def list_incidents(session: Session, limit: int = 1000) -> List[Incident]:
     return list(session.scalars(select(Incident).order_by(Incident.last_seen.desc()).limit(limit)).all())
 
 

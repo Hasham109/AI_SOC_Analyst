@@ -48,7 +48,7 @@ def _evidence(incident):
 
 
 @router.get("")
-def incidents(limit: int = Query(100, ge=1, le=200), db: Session = Depends(get_db)):
+def incidents(limit: int = Query(1000, ge=1, le=5000), db: Session = Depends(get_db)):
     rows = list_incidents(db, limit)
     return [
         {
