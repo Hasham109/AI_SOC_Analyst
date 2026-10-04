@@ -14,7 +14,7 @@ import streamlit as st
 
 # ── Page Configuration ────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="SENTINEL AI · SOC Analyst",
+    page_title="SentinalIQ · AI Powered Security Operations",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -589,7 +589,7 @@ def render_topbar(current_page: str = PAGE_SOC_OVERVIEW, summary: Optional[Dict[
                 <div>
                     <div style="display:flex; align-items:center; gap:10px;">
                         <h1 style="margin:0; font-weight:800; color:#e6ecf7; letter-spacing:-0.02em; font-size:20px; line-height:1.2;">
-                            AI-POWERED SOC ANALYST
+                            SentinalIQ <span style="font-weight:500; color:#94a3b8; font-size:15px;">· AI Powered Security Operations</span>
                         </h1>
                         <span style="background:rgba(34,211,238,0.12); color:#22d3ee; border:1px solid rgba(34,211,238,0.35); padding:2px 8px; border-radius:6px; font-size:10px; font-weight:700; letter-spacing:0.08em;">
                             TIER-3 AUTONOMOUS

@@ -19,7 +19,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    app_name: str = "Wazuh SOC Bridge"
+    app_name: str = "SentinalIQ - AI Powered Security Operations"
     app_version: str = "1.0.0"
 
     wazuh_source: Literal["local", "aws"] = "local"
